@@ -1,0 +1,7 @@
+[requires]
+gtest/1.11.0
+box2d/2.4.1
+
+[generators]
+cmake_find_package
+cmake_paths

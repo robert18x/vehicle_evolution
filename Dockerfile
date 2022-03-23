@@ -24,5 +24,4 @@ WORKDIR /home/vehicle_evolution/build
 RUN cmake .. && \
     cmake --build . --
 
-
-    
+ENTRYPOINT [""]

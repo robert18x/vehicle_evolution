@@ -15,10 +15,15 @@ include(cmake/PreventInSourceBuilds.cmake)
 assure_out_of_source_builds()
 
 
-include(cmake/Conan.cmake)
+include(CTest)
 # include(cmake/Doxygen.cmake)
 include(cmake/CompilerFlags.cmake)
 
+
+if(NOT CMAKE_BUILD_TYPE)
+  message(STATUS "No build type was specified. Choosing debug build")
+  set(CMAKE_BUILD_TYPE "Debug")
+endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   option(ENABLE_OPTIMALIZATION "Add set of optimization flags" ON)
@@ -34,21 +39,18 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
   option(ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" ON)
   option(ENABLE_TESTING "Enable testing" ON)
   option(ENABLE_COVERAGE_TESTS "Enable coverage tests" OFF)
-
-else()
-  message(AUTHOR_WARNING "Unknown build type ${CMAKE_BUILD_TYPE}")
 endif()
 
+include(cmake/ProjectSettings.cmake)
 include(cmake/CompilerFlags.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/StaticAnalyzers.cmake)
 include(cmake/Sanitizers.cmake)
-include(cmake/ProjectSettings.cmake)
+include(cmake/Conan.cmake)
 
 add_subdirectory(src)
 
 if(ENABLE_TESTING)
-  enable_testing()
   add_subdirectory(test)
 endif()
 

@@ -1,7 +1,4 @@
-if(NOT CMAKE_BUILD_TYPE)
-  message(STATUS "No setting build type was specified. Choosing debug build")
-  set(CMAKE_BUILD_TYPE "Debug")
-endif()
+
 
 # Generate compile_commands.json to make it easier to work with clang based tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

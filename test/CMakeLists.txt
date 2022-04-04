@@ -24,6 +24,7 @@ set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 
 find_package(box2d)
 find_package(GTest)
-target_link_libraries(${TESTS} GTest::GTest box2d::box2d)
+find_package(Threads)
+target_link_libraries(${TESTS} GTest::GTest box2d::box2d Threads::Threads)
 
 add_test(NAME ${TESTS} COMMAND ${TESTS})

@@ -1,5 +1,3 @@
-
-
 # Generate compile_commands.json to make it easier to work with clang based tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -11,28 +9,6 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 else()
   message(STATUS "No colored compiler diagnostic set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
 endif()
-
-
-set(COMPILER_FLAGS
-  -pthread
-)
-
-set(LINKER_FLAGS
-  -lpthread
-)
-
-if(USE_TBB)
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    list(APPEND LINKER_FLAGS -ltbb)
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-      list(APPEND COMPILER_FLAGS -O1) # tbb doesn't work without optimization
-    endif()
-  endif()
-endif()
-
-
-add_compile_options(${COMPILER_FLAGS})
-add_link_options(${LINKER_FLAGS})
 
 
 if(ENABLE_UNITY)
@@ -58,7 +34,7 @@ endif()
 
 if(ENABLE_COVERAGE_TESTS)
   if(MSVC)
-    message(SEND_ERROR "Currently coverage tests not supported for MSVC")
+    message(SEND_ERROR "Currently coverage tests are not supported for MSVC")
   elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
     add_compile_options(--coverage -O0 -g)
     add_link_options(--coverage)

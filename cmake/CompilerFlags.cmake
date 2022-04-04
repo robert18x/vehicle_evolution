@@ -28,7 +28,7 @@ endif()
 
 if(ENABLE_DEBUG)
   set(MSVC_DEBUG
-    /O2
+    /DEBUG
   )
 
   set(GCC_DEBUG

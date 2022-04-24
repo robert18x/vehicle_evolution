@@ -10,10 +10,8 @@ option(ENABLE_CCACHE "Enable compiler cache" ON)
 option(USE_TBB "Use tbb" OFF)
 option(BUILD_DOC "Build documentation" ON)
 
-
 include(cmake/PreventInSourceBuilds.cmake)
 assure_out_of_source_builds()
-
 
 include(CTest)
 # include(cmake/Doxygen.cmake)
@@ -34,7 +32,6 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
   option(ENABLE_DEBUG "Add set of debug flags" ON)
   option(ENABLE_WARNINGS "Add set of warnings flags" ON)
   option(WARNINGS_AS_ERRORS "Treat warnings as errors" OFF)
-  option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
   option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" ON)
   option(ENABLE_CLANG_TIDY "Enable static analysis with clang-tidy" ON)
   option(ENABLE_TESTING "Enable testing" ON)
@@ -44,8 +41,7 @@ endif()
 include(cmake/ProjectSettings.cmake)
 include(cmake/CompilerFlags.cmake)
 include(cmake/CompilerWarnings.cmake)
-include(cmake/StaticAnalyzers.cmake)
-include(cmake/Sanitizers.cmake)
+# include(cmake/StaticAnalyzers.cmake)
 include(cmake/Conan.cmake)
 
 add_subdirectory(src)

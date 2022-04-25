@@ -1,5 +1,5 @@
 set(SOURCES
-  hello.cpp
+  window.cpp
 )
 
 set(BINDINGS

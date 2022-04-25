@@ -8,7 +8,7 @@ set(TEST_SOURCES
 )
 
 set(PROJECT_SOURCES
-  ../src/hello.cpp
+  ../src/window.cpp
 )
 
 set(BINDINGS

@@ -58,6 +58,16 @@ bool Window::shouldClose() {
     return glfwWindowShouldClose(window);
 }
 
-void Window::swapBuffers() {
+void Window::renderFrame() {
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);
+}
+
+void Window::newFrame() {
+    glfwPollEvents();
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 }

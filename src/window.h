@@ -14,7 +14,8 @@ class Window {
     ~Window();
 
     bool shouldClose();
-    void swapBuffers();
+    void newFrame();
+    void renderFrame();
 
   private:
     void initGlfwWindow();

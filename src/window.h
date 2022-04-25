@@ -2,13 +2,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-
-#include "../bindings/imgui_impl_glfw.h"
-#include "../bindings/imgui_impl_opengl3.h"
+#include <string>
+#include "window_size.h"
 
 class Window {
   public:
-    explicit Window();
+    explicit Window(const std::string& name, const WindowSize& windowSize);
     Window(const Window&) = delete;
     Window(Window&&) = delete;
     ~Window();
@@ -17,8 +16,10 @@ class Window {
     void newFrame();
     void renderFrame();
 
+
+
   private:
-    void initGlfwWindow();
+    void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
     void CreateUI();
     static void glfwErrorCallback(int error, const char* description);
 

@@ -1,10 +1,14 @@
 #include "window.h"
-#include <stdexcept>
+
 #include <fmt/format.h>
 
+#include <stdexcept>
 
-Window::Window() {
-    initGlfwWindow();
+#include "../bindings/imgui_impl_glfw.h"
+#include "../bindings/imgui_impl_opengl3.h"
+
+Window::Window(const std::string& name, const WindowSize& windowSize) {
+    initGlfwWindow(name, windowSize);
     CreateUI();
     ImGui::StyleColorsClassic();
 }
@@ -15,7 +19,7 @@ Window::~Window() {
     ImGui::DestroyContext();
 }
 
-void Window::initGlfwWindow() {
+void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSize) {
     glfwSetErrorCallback(Window::glfwErrorCallback);
 
     auto status = glfwInit();
@@ -28,7 +32,7 @@ void Window::initGlfwWindow() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(400, 400, "Vehicle_evolution", nullptr, nullptr);
+    window = glfwCreateWindow(windowSize.width, windowSize.height, name.c_str(), nullptr, nullptr);
     if (window == nullptr) {
         glfwTerminate();
         throw std::runtime_error("Failed to open GLFW window.");

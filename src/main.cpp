@@ -1,17 +1,12 @@
 #include <box2d/b2_world.h>
-#include <iostream>
-#include <imgui.h>
-#include "../bindings/imgui_impl_glfw.h"
-#include "../bindings/imgui_impl_opengl3.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <fmt/format.h>
-#include "window.h"
 
+#include <iostream>
+
+#include "window.h"
 
 int main(int, char**) {
     try {
-        Window window;
+        Window window("Vehicle evolution", {400, 400});
         while (not window.shouldClose()) {
             window.newFrame();
 

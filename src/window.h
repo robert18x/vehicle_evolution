@@ -20,7 +20,7 @@ class Window {
 
   private:
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
-    void CreateUI();
+    void createUI();
     static void glfwErrorCallback(int error, const char* description);
 
     static constexpr char* glslVersion = nullptr;

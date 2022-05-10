@@ -1,4 +1,8 @@
+.vscode
 .git/
-build/
 .gitignore
+.dockerignore
+bindings/
+build/
+scripts/
 Dockerfile

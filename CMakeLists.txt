@@ -51,5 +51,3 @@ if(ENABLE_TESTING)
 endif()
 
 enable_ccache_globally()
-
-

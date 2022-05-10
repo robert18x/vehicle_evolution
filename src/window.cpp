@@ -9,7 +9,7 @@
 
 Window::Window(const std::string& name, const WindowSize& windowSize) {
     initGlfwWindow(name, windowSize);
-    CreateUI();
+    createUI();
     ImGui::StyleColorsClassic();
 }
 
@@ -40,7 +40,7 @@ void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSiz
     glfwMakeContextCurrent(window);
 }
 
-void Window::CreateUI() {
+void Window::createUI() {
     ImGui::CreateContext();
 
     bool success = ImGui_ImplGlfw_InitForOpenGL(window, false);

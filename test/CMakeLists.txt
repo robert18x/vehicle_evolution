@@ -8,7 +8,12 @@ set(TEST_SOURCES
 )
 
 set(PROJECT_SOURCES
-  ../src/hello.cpp
+  ../src/window.cpp
+)
+
+set(BINDINGS
+  ../../bindings/imgui_impl_glfw.cpp
+  ../../bindings/imgui_impl_opengl3.cpp
 )
 
 include_directories( .
@@ -18,13 +23,18 @@ include_directories( .
 add_executable(${TESTS}
   ${TEST_SOURCES}
   ${PROJECT_SOURCES}
+  ${BINDINGS}
 )
 
 set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 
-find_package(box2d)
 find_package(GTest)
 find_package(Threads)
-target_link_libraries(${TESTS} GTest::GTest box2d::box2d Threads::Threads)
+find_package(box2d)
+find_package(imgui)
+find_package(glfw3)
+find_package(glad)
+find_package(fmt)
+target_link_libraries(${TESTS} GTest::GTest Threads::Threads box2d::box2d glfw::glfw imgui::imgui glad::glad fmt::fmt)
 
 add_test(NAME ${TESTS} COMMAND ${TESTS})

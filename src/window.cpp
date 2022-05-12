@@ -9,6 +9,7 @@
 
 Window::Window(const std::string& name, const WindowSize& windowSize) {
     initGlfwWindow(name, windowSize);
+    loadOpenglFunctions();
     createUI();
     ImGui::StyleColorsClassic();
 }
@@ -16,6 +17,7 @@ Window::Window(const std::string& name, const WindowSize& windowSize) {
 Window::~Window() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    glfwTerminate();
     ImGui::DestroyContext();
 }
 
@@ -38,6 +40,11 @@ void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSiz
         throw std::runtime_error("Failed to open GLFW window.");
     }
     glfwMakeContextCurrent(window);
+}
+
+void Window::loadOpenglFunctions() {
+    // Load OpenGL functions using glad
+	gladLoadGL();
 }
 
 void Window::createUI() {
@@ -70,6 +77,8 @@ void Window::renderFrame() {
 
 void Window::newFrame() {
     glfwPollEvents();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();

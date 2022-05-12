@@ -16,10 +16,9 @@ class Window {
     void newFrame();
     void renderFrame();
 
-
-
   private:
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
+    void loadOpenglFunctions();
     void createUI();
     static void glfwErrorCallback(int error, const char* description);
 

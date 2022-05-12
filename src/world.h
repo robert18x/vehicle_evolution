@@ -1,3 +1,9 @@
+/**
+ * @file world.h
+ * @author Jakub Ptasznik
+ *
+ */
+
 #pragma once
 #include <box2d/box2d.h>
 

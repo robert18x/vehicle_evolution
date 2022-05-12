@@ -1,3 +1,9 @@
+/**
+ * @file window.cpp
+ * @author Robert Żurawski
+ *
+ */
+
 #include "window.h"
 
 #include <fmt/format.h>

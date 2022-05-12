@@ -1,3 +1,9 @@
+/**
+ * @file world.cpp
+ * @author Jakub Ptasznik
+ *
+ */
+
 #include "world.h"
 
 #include "draw.h"

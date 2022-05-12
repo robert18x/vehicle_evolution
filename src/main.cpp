@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @author Robert Żurawski
+ * @author Jakub Ptasznik
+ *
+ */
+
 #include <box2d/box2d.h>
 
 #include <iostream>

@@ -12,7 +12,7 @@ RUN apt-get install -y gcc-10 g++-10 make ccache python3 python3-pip libgl-dev p
         libxpm-dev libxrandr-dev libxrender-dev libxres-dev libxss-dev libxt-dev libxtst-dev libxv-dev libxvmc-dev \
         libxxf86vm-dev xtrans-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev \
         libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev \
-        libxcb-xinerama0-dev xkb-data libxcb-dri3-dev uuid-dev libxcb-util-dev xorg-dev libglu1-mesa-dev
+        libxcb-xinerama0-dev xkb-data libxcb-dri3-dev uuid-dev libxcb-util-dev xorg-dev libglu1-mesa-dev doxygen
 RUN python3 -m pip install conan cmake && pip3 install --upgrade conan cmake
 
 ENV CC=/usr/bin/gcc-10

@@ -14,7 +14,7 @@ include(cmake/PreventInSourceBuilds.cmake)
 assure_out_of_source_builds()
 
 include(CTest)
-# include(cmake/Doxygen.cmake)
+include(cmake/Doxygen.cmake)
 include(cmake/CompilerFlags.cmake)
 
 

@@ -1,3 +1,9 @@
+/**
+ * @file window.h
+ * @author Robert Żurawski
+ *
+ */
+
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -16,10 +22,9 @@ class Window {
     void newFrame();
     void renderFrame();
 
-
-
   private:
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
+    void loadOpenglFunctions();
     void createUI();
     static void glfwErrorCallback(int error, const char* description);
 

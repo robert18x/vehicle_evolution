@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
   ${SOURCES}
   ${BINDINGS}
   main.cpp
+  world.cpp
   draw.cpp
 )
 

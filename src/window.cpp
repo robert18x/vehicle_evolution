@@ -9,9 +9,13 @@
 #include <fmt/format.h>
 
 #include <stdexcept>
-
+#ifdef _WIN32
+#include "../out/build/bindings/imgui_impl_glfw.h"
+#include "../out/build/bindings/imgui_impl_opengl3.h"
+#else
 #include "../bindings/imgui_impl_glfw.h"
 #include "../bindings/imgui_impl_opengl3.h"
+#endif
 
 Window::Window(const std::string& name, const WindowSize& windowSize) {
     initGlfwWindow(name, windowSize);

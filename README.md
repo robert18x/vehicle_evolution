@@ -20,7 +20,6 @@ Należy zainstalować w najnowszej wersji następujące narzędzia:
  * cmake
  * python, a poprzez python-a paczkę conan
  * visual studio 2022 -> kompilator MSVC
- * ...
 
 Następnie należy zbudować projekt cmake-owy w konsoli PowerShell (lub cmd, lecz w PS automatycznie są pobierane zmienne środowiskowe)
 

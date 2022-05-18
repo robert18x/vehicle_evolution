@@ -7,10 +7,10 @@ if(MSVC)
     ../out/build/bindings/imgui_impl_glfw.cpp
     ../out/build/bindings/imgui_impl_opengl3.cpp
   )
-elseif()
+else()
   set(BINDINGS
-    ../../bindings/imgui_impl_glfw.cpp
-    ../../bindings/imgui_impl_opengl3.cpp
+    ../bindings/imgui_impl_glfw.cpp
+    ../bindings/imgui_impl_opengl3.cpp
   )
 endif()
 

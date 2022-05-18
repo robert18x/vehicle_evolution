@@ -15,6 +15,9 @@ Po zbudowaniu projektu w katalogu `build/src/` będzie znajdować się plik wyko
 
 Dodatkowo po zbudowaniu projektu w katalogu `build/doxygen` będzie znajdować się wygenerowana dokumentacja. Aby ją włączyć należy otworzyć plik `html/index.html`.
 
+### Docker
+Aby uruchomić projekt w dockerze należy będąc w główym katalogu projektu uruchomić skrypt `scripts/run_in_docker.sh`
+
 ## Windows 10
 Należy zainstalować w najnowszej wersji następujące narzędzia:
  * cmake

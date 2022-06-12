@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME}
   main.cpp
   world.cpp
   draw.cpp
+  car.cpp
 )
 
 find_package(Threads)

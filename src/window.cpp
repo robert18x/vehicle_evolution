@@ -6,9 +6,15 @@
 
 #include "window.h"
 
+#include <box2d/box2d.h>
 #include <fmt/format.h>
 
+#include <chrono>
 #include <stdexcept>
+#include <thread>
+
+#include "config.h"
+#include "draw.h"
 #ifdef _WIN32
 #include "../out/build/bindings/imgui_impl_glfw.h"
 #include "../out/build/bindings/imgui_impl_opengl3.h"
@@ -17,7 +23,8 @@
 #include "../bindings/imgui_impl_opengl3.h"
 #endif
 
-Window::Window(const std::string& name, const WindowSize& windowSize) {
+Window::Window(const std::string& name, const WindowSize& windowSize)
+    : targetFrameDuration(1.0 / static_cast<double>(frameRate)), frameTime(0.0), sleepAdjust(0.0) {
     initGlfwWindow(name, windowSize);
     loadOpenglFunctions();
     createUI();
@@ -50,11 +57,13 @@ void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSiz
         throw std::runtime_error("Failed to open GLFW window.");
     }
     glfwMakeContextCurrent(window);
+    glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
+    glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
 }
 
 void Window::loadOpenglFunctions() {
     // Load OpenGL functions using glad
-	gladLoadGL();
+    gladLoadGL();
 }
 
 void Window::createUI() {
@@ -83,14 +92,33 @@ void Window::renderFrame() {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);
+    glfwPollEvents();
+    endFrameTimePoint = std::chrono::steady_clock::now();
+    std::chrono::duration<double> timeUsed = endFrameTimePoint - startFrameTimePoint;
+    std::chrono::duration<double> sleepTime = targetFrameDuration - timeUsed + sleepAdjust;
+    if (sleepTime > std::chrono::duration<double>(0)) {
+        std::this_thread::sleep_for(sleepTime);
+    }
+    frameTime = std::chrono::steady_clock::now() - startFrameTimePoint;
+    // Compute the sleep adjustment using a low pass filter
+    sleepAdjust = 0.9 * sleepAdjust + 0.1 * (targetFrameDuration - frameTime);
 }
 
 void Window::newFrame() {
-    glfwPollEvents();
-
+    startFrameTimePoint = std::chrono::steady_clock::now();
+    setWindowsSize();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+}
+
+
+void Window::setWindowsSize(){
+    glfwGetWindowSize(window, &g_camera.m_width, &g_camera.m_height);
+
+    int bufferWidth = 0;
+    int bufferHeight = 0;
+    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+    glViewport(0, 0, bufferWidth, bufferHeight);
 }

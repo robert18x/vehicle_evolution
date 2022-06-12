@@ -6,12 +6,12 @@
 
 #include "world.h"
 
+#include <random>
 #include "draw.h"
 
-World::World() {
-	gravity.Set(0.0f, -10.0f);
-	world = new b2World(gravity);
-
+World::World() : world(new b2World(gravity)), car(Car(world)) {
+	gravity.Set(0.0f, -9.81f);
+    world->SetGravity(gravity);
     world->SetDebugDraw(&g_debugDraw);
 
     g_debugDraw.Create();
@@ -35,32 +35,43 @@ void World::step() const {
 	world->SetContinuousPhysics(true);
 
     world->Step(timeStep, velocityIterations, positionIterations);
+    car.CenterCamera();
 
     world->DebugDraw();
     g_debugDraw.Flush();
 }
 
 void World::initWorld() const {
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0.0f, 5.0f);
-    b2Body* groundBody = world->CreateBody(&groundBodyDef);
+    b2Body* ground = NULL;
+		{
+			b2BodyDef bd;
+			ground = world->CreateBody(&bd);
 
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(0.0f, 20.0f);
-    b2Body* body = world->CreateBody(&bodyDef);
+			b2EdgeShape shape;
 
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(20.0f, 3.0f);
+			b2FixtureDef groundFD;
+			groundFD.shape = &shape;
+			groundFD.density = 0.0f;
+			groundFD.friction = 0.6f;
+            groundFD.filter.categoryBits = 0x0001;
 
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(1.0f, 1.0f);
+            std::mt19937 gen(0);
+            std::uniform_real_distribution<> dis(-3.0, 4.0);
+            float hs[100];
+			for (int n = 0; n < 100; ++n) 
+            {
+                hs[n] = dis(gen);
+            }
 
-    groundBody->CreateFixture(&groundBox, 0.0f);
+			float x = -40.0f, y1 = 0.0f, dx = 8.0f;
 
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.3f;
-    body->CreateFixture(&fixtureDef);
+			for (int32 i = 0; i < 100; ++i)
+			{
+				float y2 = hs[i] - 2.0f;
+				shape.SetTwoSided(b2Vec2(x, y1), b2Vec2(x + dx, y2));
+				ground->CreateFixture(&groundFD);
+				y1 = y2;
+				x += dx;
+			}
+		}
 }

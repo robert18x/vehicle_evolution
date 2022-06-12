@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <string>
+#include <chrono>
 #include "window_size.h"
 
 class Window {
@@ -26,8 +27,15 @@ class Window {
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
     void loadOpenglFunctions();
     void createUI();
+    void setWindowsSize();
     static void glfwErrorCallback(int error, const char* description);
 
     static constexpr char* glslVersion = nullptr;
+    const std::chrono::duration<double> targetFrameDuration;
+
+    std::chrono::duration<double> frameTime;
+    std::chrono::duration<double> sleepAdjust;
+    std::chrono::steady_clock::time_point startFrameTimePoint;
+    std::chrono::steady_clock::time_point endFrameTimePoint;
     GLFWwindow* window;
 };

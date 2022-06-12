@@ -9,11 +9,15 @@
 #include <random>
 #include "draw.h"
 
-World::World() : world(new b2World(gravity)), car(Car(world)) {
+World::World() : world(new b2World(gravity)) {
 	gravity.Set(0.0f, -9.81f);
     world->SetGravity(gravity);
     world->SetDebugDraw(&g_debugDraw);
-
+    int nCars = 5;
+    cars.reserve(nCars);
+    for (int i = 0; i < nCars; ++i) {
+        cars.emplace_back(world);
+    }
     g_debugDraw.Create();
 
     initWorld();
@@ -35,7 +39,7 @@ void World::step() const {
 	world->SetContinuousPhysics(true);
 
     world->Step(timeStep, velocityIterations, positionIterations);
-    car.CenterCamera();
+    cars[0].CenterCamera();
 
     world->DebugDraw();
     g_debugDraw.Flush();

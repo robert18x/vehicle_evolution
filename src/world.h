@@ -7,6 +7,7 @@
 #pragma once
 #include <box2d/box2d.h>
 #include <memory>
+#include <vector>
 #include "car.h"
 
 class World {
@@ -26,5 +27,5 @@ class World {
     int32 positionIterations = 3;
     b2World* world;
     b2Vec2 gravity;
-    Car car;
+    std::vector<Car> cars;
 };

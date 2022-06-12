@@ -7,7 +7,8 @@
 #include "window.h"
 
 #include <fmt/format.h>
-
+#include <box2d/box2d.h>
+#include "draw.h"
 #include <stdexcept>
 #ifdef _WIN32
 #include "../out/build/bindings/imgui_impl_glfw.h"
@@ -50,11 +51,13 @@ void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSiz
         throw std::runtime_error("Failed to open GLFW window.");
     }
     glfwMakeContextCurrent(window);
+	glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
+
 }
 
 void Window::loadOpenglFunctions() {
     // Load OpenGL functions using glad
-	gladLoadGL();
+    gladLoadGL();
 }
 
 void Window::createUI() {
@@ -94,3 +97,4 @@ void Window::newFrame() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
+

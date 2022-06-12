@@ -20,6 +20,7 @@ class EvolutionAlgorithm {
     std::vector<Car::Configuration> evolve(std::vector<std::pair<Distance, Car::Configuration>>& configuration);
   private:
     std::vector<Car::Configuration> select(std::vector<std::pair<Distance, Car::Configuration>>& previousConfigurations);
+    Car::Configuration tournamentSelection(const std::vector<std::pair<Distance, Car::Configuration>>& previousConfigurations);
     void crossover(std::vector<Car::Configuration>& newConfigurations);
     void mutate(std::vector<Car::Configuration>& newConfigurations);
 

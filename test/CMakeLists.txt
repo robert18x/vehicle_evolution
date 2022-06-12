@@ -8,9 +8,11 @@ set(TEST_SOURCES
 )
 
 set(PROJECT_SOURCES
+  ../src/window.cpp
   ../src/world.cpp
   ../src/draw.cpp
   ../src/car.cpp
+  ../src/evolution_algorithm.cpp
 )
 
 set(BINDINGS

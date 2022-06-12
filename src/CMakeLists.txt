@@ -3,6 +3,7 @@ set(SOURCES
   world.cpp
   draw.cpp
   car.cpp
+  evolution_algorithm.cpp
 )
 
 if(MSVC)

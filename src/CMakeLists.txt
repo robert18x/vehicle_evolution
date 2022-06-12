@@ -1,5 +1,8 @@
 set(SOURCES
   window.cpp
+  world.cpp
+  draw.cpp
+  car.cpp
 )
 
 if(MSVC)
@@ -18,9 +21,6 @@ add_executable(${PROJECT_NAME}
   ${SOURCES}
   ${BINDINGS}
   main.cpp
-  world.cpp
-  draw.cpp
-  car.cpp
 )
 
 find_package(Threads)

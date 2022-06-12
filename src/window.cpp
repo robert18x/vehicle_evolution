@@ -115,7 +115,7 @@ void Window::newFrame() {
 
 void Window::drawOptionsSubwindow() {
     int subwindowWidth = 150;
-    int subwindowHeight= 120;
+    int subwindowHeight = 120;
     int windowMargin = 10;
     static int x = 0;
     static int y = 0;
@@ -129,7 +129,7 @@ void Window::drawOptionsSubwindow() {
     ImGui::End();
 }
 
-void Window::setWindowsSize(){
+void Window::setWindowsSize() {
     glfwGetWindowSize(window, &g_camera.m_width, &g_camera.m_height);
 
     int bufferWidth = 0;

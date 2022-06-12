@@ -58,6 +58,7 @@ void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSiz
     }
     glfwMakeContextCurrent(window);
     glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
+    glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
 }
 
 void Window::loadOpenglFunctions() {
@@ -105,8 +106,19 @@ void Window::renderFrame() {
 
 void Window::newFrame() {
     startFrameTimePoint = std::chrono::steady_clock::now();
+    setWindowsSize();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+}
+
+
+void Window::setWindowsSize(){
+    glfwGetWindowSize(window, &g_camera.m_width, &g_camera.m_height);
+
+    int bufferWidth = 0;
+    int bufferHeight = 0;
+    glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+    glViewport(0, 0, bufferWidth, bufferHeight);
 }

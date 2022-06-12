@@ -27,6 +27,7 @@ class Window {
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
     void loadOpenglFunctions();
     void createUI();
+    void setWindowsSize();
     static void glfwErrorCallback(int error, const char* description);
 
     static constexpr char* glslVersion = nullptr;

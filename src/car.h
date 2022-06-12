@@ -19,7 +19,7 @@ class Car {
     Car(const Car&) = delete;
     Car(Car&& other);
 
-    void RandomCar();
+    void RandomCar(b2World* world);
     void CenterCamera() const;
 
     Configuration getConfiguration();

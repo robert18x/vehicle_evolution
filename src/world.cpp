@@ -6,6 +6,7 @@
 
 #include "world.h"
 
+#include <random>
 #include "draw.h"
 
 World::World() : world(new b2World(gravity)), car(Car(world)) {
@@ -48,21 +49,27 @@ void World::initWorld() const {
 
 			b2EdgeShape shape;
 
-			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 0.0f;
-			fd.friction = 0.6f;
-            fd.filter.categoryBits = 0x0001;
+			b2FixtureDef groundFD;
+			groundFD.shape = &shape;
+			groundFD.density = 0.0f;
+			groundFD.friction = 0.6f;
+            groundFD.filter.categoryBits = 0x0001;
 
-			float hs[10] = {0.25f, 1.0f, 3.0f, 0.0f, 0.0f, -1.0f, -2.0f, -2.0f, -1.25f, 0.0f};
+            std::mt19937 gen(0);
+            std::uniform_real_distribution<> dis(-3.0, 4.0);
+            float hs[100];
+			for (int n = 0; n < 100; ++n) 
+            {
+                hs[n] = dis(gen);
+            }
 
-			float x = -40.0f, y1 = 0.0f, dx = 10.0f;
+			float x = -40.0f, y1 = 0.0f, dx = 8.0f;
 
-			for (int32 i = 0; i < 10; ++i)
+			for (int32 i = 0; i < 100; ++i)
 			{
 				float y2 = hs[i] - 2.0f;
 				shape.SetTwoSided(b2Vec2(x, y1), b2Vec2(x + dx, y2));
-				ground->CreateFixture(&fd);
+				ground->CreateFixture(&groundFD);
 				y1 = y2;
 				x += dx;
 			}

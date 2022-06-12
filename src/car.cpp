@@ -80,6 +80,9 @@ Car::Car(b2World* world) {
 	jd.enableLimit = true;
 	m_spring2 = (b2WheelJoint*)world->CreateJoint(&jd);
 
-    m_spring1->SetMotorSpeed(-10.0f);
+    m_spring1->SetMotorSpeed(-25.0f);
+}
+
+void Car::CenterCamera() const{
     g_camera.m_center.x = m_car->GetPosition().x;
 }

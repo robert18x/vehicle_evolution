@@ -7,17 +7,13 @@
 #include "world.h"
 
 #include "draw.h"
-#include "car.h"
 
-World::World() {
-	gravity.Set(0.0f, -2.0f);
-	world = new b2World(gravity);
-
+World::World() : world(new b2World(gravity)), car(Car(world)) {
+	gravity.Set(0.0f, -9.81f);
+    world->SetGravity(gravity);
     world->SetDebugDraw(&g_debugDraw);
 
     g_debugDraw.Create();
-
-    Car car = Car(world);
 
     initWorld();
 }
@@ -38,6 +34,7 @@ void World::step() const {
 	world->SetContinuousPhysics(true);
 
     world->Step(timeStep, velocityIterations, positionIterations);
+    car.CenterCamera();
 
     world->DebugDraw();
     g_debugDraw.Flush();

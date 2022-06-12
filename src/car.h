@@ -11,6 +11,7 @@ class Car {
         Car(b2World* world);
         Car(const Car&) = delete;
         Car(Car&&) = delete;
+        void CenterCamera() const;
 
     private:
         b2Body* m_car;

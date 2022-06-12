@@ -22,6 +22,7 @@ class Window {
     bool shouldClose();
     void newFrame();
     void renderFrame();
+    void drawOptionsSubwindow();
 
   private:
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
@@ -33,6 +34,7 @@ class Window {
     static constexpr char* glslVersion = nullptr;
     const std::chrono::duration<double> targetFrameDuration;
 
+    
     std::chrono::duration<double> frameTime;
     std::chrono::duration<double> sleepAdjust;
     std::chrono::steady_clock::time_point startFrameTimePoint;

@@ -113,6 +113,21 @@ void Window::newFrame() {
     ImGui::NewFrame();
 }
 
+void Window::drawOptionsSubwindow() {
+    int subwindowWidth = 150;
+    int subwindowHeight= 120;
+    int windowMargin = 10;
+    static int x = 0;
+    static int y = 0;
+    static float z = 10.f;
+    ImGui::SetNextWindowPos(ImVec2(g_camera.m_width - subwindowWidth - windowMargin, windowMargin));
+    ImGui::SetNextWindowSize(ImVec2(subwindowWidth, subwindowHeight - windowMargin));
+    ImGui::Begin("Params", &g_debugDraw.m_showUI, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::SliderInt("Vel Iters", &x, 0, 50);
+    ImGui::SliderInt("Pos Iters", &y, 0, 50);
+    ImGui::SliderFloat("Hertz", &z, 5.0f, 120.0f, "%.0f hz");
+    ImGui::End();
+}
 
 void Window::setWindowsSize(){
     glfwGetWindowSize(window, &g_camera.m_width, &g_camera.m_height);

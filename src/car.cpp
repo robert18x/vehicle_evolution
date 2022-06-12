@@ -11,14 +11,17 @@
 
 Car::Car(b2World* world) {
     b2PolygonShape chassis;
-    b2Vec2 vertices[8];
+    std::vector<b2Vec2> vertices;
+    vertices.resize(6);
     vertices[0].Set(-1.5f, -0.5f);
     vertices[1].Set(1.5f, -0.5f);
     vertices[2].Set(1.5f, 0.0f);
     vertices[3].Set(0.0f, 0.9f);
     vertices[4].Set(-1.15f, 0.9f);
     vertices[5].Set(-1.5f, 0.2f);
-    chassis.Set(vertices, 6);
+    chassis.Set(vertices.data(), 6);
+
+    configuration = {6, vertices};
 
     b2CircleShape circle;
     circle.m_radius = 0.4f;
@@ -94,29 +97,44 @@ Car::Car(Car&& other) : m_car(other.m_car), m_wheel1(other.m_wheel1), m_wheel2(o
 }
 
 void Car::RandomCar() {
+    // world->DestroyBody(m_car);
+    // world->DestroyBody(m_wheel1);
+    // world->DestroyBody(m_wheel2);
+    // // world->DestroyBody(m_spring1);
+    // // world->
+
     // static std::mt19937 gen(0);
     // static std::uniform_int_distribution<> disVertices(3, 10);
     // static std::uniform_real_distribution<> dis(-2.0, 2.0);
 
-    // int nvertices = disVertices(gen);
+    // int nVertices = disVertices(gen);
     // b2Vec2 vertices[10];
-    // for (int i = 0 i < nvertices; ++i)
+    // for (int i = 0; i < nVertices; ++i)
     // {
-    //     float x = dis(gen);
-    //     float y = dis(gen);
-    //     disVertices[i].Set
+    //     double x = dis(gen);
+    //     double y = dis(gen);
+    //     vertices[i].Set(x, y);
     // }
     // b2PolygonShape chassis;
-    // b2Vec2 vertices[8];
-    // vertices[0].Set(-1.5f, -0.5f);
-    // vertices[1].Set(1.5f, -0.5f);
-    // vertices[2].Set(1.5f, 0.0f);
-    // vertices[3].Set(0.0f, 0.9f);
-    // vertices[4].Set(-1.15f, 0.9f);
-    // vertices[5].Set(-1.5f, 0.2f);
-    // chassis.Set(vertices, 6);
+    // chassis.Set(vertices, nVertices);
+
+    // b2FixtureDef carFD;
+    // carFD.shape = &chassis;
+    // carFD.density = 1.0f;
+    // carFD.filter.categoryBits = 0x0002;
+    // carFD.filter.maskBits = 0x0001;
+
+    // b2BodyDef bd;
+    // bd.type = b2_dynamicBody;
+    // bd.position.Set(0.0f, 1.0f);
+    // m_car = world->CreateBody(&bd);
+    // m_car->CreateFixture(&carFD);
 }
 
 void Car::CenterCamera() const {
     g_camera.m_center.x = m_car->GetPosition().x;
+}
+
+auto Car::getConfiguration() -> Configuration {
+    return configuration;
 }

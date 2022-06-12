@@ -62,7 +62,7 @@ void World::initWorld() const {
             std::mt19937 gen(0);
             std::uniform_real_distribution<> dis(-3.0, 4.0);
             float hs[100];
-			for (int n = 0; n < 100; ++n) 
+			for (int n = 0; n < 100; ++n)
             {
                 hs[n] = dis(gen);
             }

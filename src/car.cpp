@@ -5,31 +5,27 @@
 
 #include "car.h"
 
-#include <random>
+#include <utility>
 
 #include "draw.h"
+#include "utils.h"
 
 Car::Car(b2World* wrld) {
-    static std::mt19937 gen(0);
-    static std::uniform_int_distribution<> disVertices(3, 10);
-    static std::uniform_real_distribution<> dis(0.0, 8.0);
-
-    int nVertices = disVertices(gen);
+    int nVertices = utils::random(3, 8);
     std::vector<b2Vec2> vertices;
     vertices.reserve(maxVertices);
-    for (int i = 0; i < nVertices; ++i) {
-        double x = dis(gen);
-        double y = dis(gen);
+    for (size_t i = 0; std::cmp_less(i, nVertices); ++i) {
+        auto x = utils::random(0.f, 8.f);
+        auto y = utils::random(0.f, 8.f);
         vertices[i].Set(x, y);
     }
 
-    static std::uniform_int_distribution<> disWheel(0, nVertices - 1);
-    int wheel1Vertex = disWheel(gen);
-    int wheel2Vertex = wheel1Vertex;
+    auto randWheelNumber = [=]() { return utils::random(0, nVertices - 1); };
+    int wheel1Vertex = randWheelNumber();
+    int wheel2Vertex = randWheelNumber();
     while (wheel1Vertex == wheel2Vertex) {
-        wheel2Vertex = disWheel(gen);
+        wheel2Vertex = randWheelNumber();
     }
-
     configuration = {nVertices, std::move(vertices), wheel1Vertex, wheel2Vertex};
 
     world = wrld;
@@ -85,8 +81,8 @@ void Car::initCar() {
     m_car = world->CreateBody(&bd);
     m_car->CreateFixture(&carFD);
 
-    b2Vec2 wheel1Vec = configuration.vertices[configuration.wheel1Vertex];
-    b2Vec2 wheel2Vec = configuration.vertices[configuration.wheel2Vertex];
+    b2Vec2 wheel1Vec = configuration.vertices[static_cast<size_t>(configuration.wheel1Vertex)];
+    b2Vec2 wheel2Vec = configuration.vertices[static_cast<size_t>(configuration.wheel2Vertex)];
 
     b2CircleShape circle;
     circle.m_radius = 0.4f;
@@ -125,7 +121,7 @@ void Car::initCar() {
     jd.lowerTranslation = -0.25f;
     jd.upperTranslation = 0.25f;
     jd.enableLimit = true;
-    m_spring1 = (b2WheelJoint*)world->CreateJoint(&jd);
+    m_spring1 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
 
     jd.Initialize(m_car, m_wheel2, m_wheel2->GetPosition(), axis);
     jd.motorSpeed = 0.0f;
@@ -136,7 +132,7 @@ void Car::initCar() {
     jd.lowerTranslation = -0.25f;
     jd.upperTranslation = 0.25f;
     jd.enableLimit = true;
-    m_spring2 = (b2WheelJoint*)world->CreateJoint(&jd);
+    m_spring2 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
 
     m_spring1->SetMotorSpeed(-25.0f);
 }

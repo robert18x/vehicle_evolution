@@ -29,7 +29,7 @@ Car::Car(b2World* world) {
     b2FixtureDef carFD;
     carFD.shape = &chassis;
     carFD.density = 1.0f;
-    carFD.filter.categoryBits = 0x0002;
+    carFD.filter.categoryBits = carMask;
     carFD.filter.maskBits = 0x0001;
 
     b2BodyDef bd;
@@ -42,7 +42,7 @@ Car::Car(b2World* world) {
     fd.shape = &circle;
     fd.density = 1.0f;
     fd.friction = 0.9f;
-    fd.filter.categoryBits = 0x0003;
+    fd.filter.categoryBits = carMask;
     fd.filter.maskBits = 0x0001;
 
     bd.position.Set(-1.0f, 0.35f);

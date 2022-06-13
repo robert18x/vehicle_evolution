@@ -57,24 +57,26 @@ void EvolutionAlgorithm::crossover(std::vector<Car::Configuration>& configuratio
 Car::Configuration EvolutionAlgorithm::crossoverIndividuals(const Car::Configuration& first, const Car::Configuration& second) {
     Car::Configuration newConfiguration;
     auto& originalVertices = first.vertices;
-    std::vector<b2Vec2> newVertices(originalVertices.size());
-    int i = 0;
-    for (auto& vertex : originalVertices) {
-        if (i < second.vertices.size())
-        {
+    std::vector<b2Vec2> newVertices;
+    newVertices.reserve(originalVertices.size());
+    for (std::size_t i = 0; i < first.vertices.size(); ++i) {
+        auto& firstVertex = first.vertices[i];
+        if (i < second.vertices.size()) {
+            auto& secondVertex = second.vertices[i];
             auto point = utils::random(0.0f, 1.0f);
-            auto x = vertex.x * point + second.vertices[i].x * (1.0f - point);
-            auto y = vertex.y * point + second.vertices[i].y * (1.0f - point);
+            float x = firstVertex.x * point + secondVertex.x * (1.0f - point);
+            float y = firstVertex.y * point + secondVertex.y * (1.0f - point);
             newVertices[i].Set(x, y);
+        } else {
+            newVertices.emplace_back(firstVertex.x, firstVertex.y);
         }
-        newVertices[i].Set(vertex.x, vertex.y);
     }
 
-    auto wheel1Point = utils::random(0.0f, 1.0f);
-    auto newWheel1Radius = first.wheel1Radius * wheel1Point + second.wheel1Radius * (1.0f - wheel1Point);
+    double wheel1Point = utils::random(0.0, 1.0);
+    double newWheel1Radius = first.wheel1Radius * wheel1Point + second.wheel1Radius * (1.0 - wheel1Point);
 
-    auto wheel2Point = utils::random(0.0f, 1.0f);
-    auto newWheel2Radius = first.wheel2Radius * wheel2Point + second.wheel2Radius * (1.0f - wheel2Point);
+    double wheel2Point = utils::random(0.0, 1.0);
+    double newWheel2Radius = first.wheel2Radius * wheel2Point + second.wheel2Radius * (1.0 - wheel2Point);
 
     newConfiguration = {newVertices, first.wheel1Vertex, first.wheel2Vertex, newWheel1Radius, newWheel2Radius};
     return newConfiguration;
@@ -99,8 +101,8 @@ void EvolutionAlgorithm::mutateIndividual(Car::Configuration& individual) {
     if (random < 0.33 and individual.vertices.size() > 3) {
         individual.vertices.pop_back();
     } else if (random < 0.66 and individual.vertices.size() < Car::maxVertices) {
-        auto x = utils::random(0.f, 8.f);
-        auto y = utils::random(0.f, 8.f);
+        float x = utils::random(0.f, 8.f);
+        float y = utils::random(0.f, 8.f);
         individual.vertices.emplace_back(x, y);
     }
 

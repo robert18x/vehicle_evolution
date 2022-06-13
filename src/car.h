@@ -22,7 +22,7 @@ class Car {
     Car(b2World* wrld, Configuration conf);
     Car(const Car&) = delete;
     Car(Car&& other);
-    ~Car();
+    ~Car() = default;
 
     void CenterCamera() const;
 

@@ -15,7 +15,7 @@ Car::Car(b2World* wrld) {
     std::vector<b2Vec2> vertices(nVertices);
     for (size_t i = 0; std::cmp_less(i, nVertices); ++i) {
         auto x = utils::random(0.f, 8.f);
-        auto y = utils::random(0.f, 8.f);
+        auto y = utils::random(3.f, 11.f);
         vertices[i].Set(x, y);
     }
 
@@ -50,15 +50,6 @@ Car::Car(Car&& other) : m_car(other.m_car), m_wheel1(other.m_wheel1), m_wheel2(o
     other.m_spring2 = nullptr;
 }
 
-Car::~Car() {
-    world->DestroyJoint(m_spring1);
-    world->DestroyJoint(m_spring2);
-
-    world->DestroyBody(m_wheel1);
-    world->DestroyBody(m_wheel2);
-    world->DestroyBody(m_car);
-}
-
 void Car::CenterCamera() const {
     g_camera.m_center.x = m_car->GetPosition().x;
 }
@@ -84,8 +75,8 @@ void Car::initCar() {
     m_car = world->CreateBody(&bd);
     m_car->CreateFixture(&carFD);
 
-    b2Vec2 wheel1Vec = configuration.vertices[static_cast<size_t>(configuration.wheel1Vertex)];
-    b2Vec2 wheel2Vec = configuration.vertices[static_cast<size_t>(configuration.wheel2Vertex)];
+    b2Vec2 wheel1Vec = configuration.vertices[configuration.wheel1Vertex];
+    b2Vec2 wheel2Vec = configuration.vertices[configuration.wheel2Vertex];
 
     b2CircleShape circle1;
     circle1.m_radius = configuration.wheel1Radius;

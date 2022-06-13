@@ -5,9 +5,8 @@
  */
 
 #include "world.h"
-
-#include <random>
-
+#include <array>
+#include "utils.h"
 #include "draw.h"
 
 World::World() : world(new b2World(gravity)) {
@@ -60,16 +59,14 @@ void World::initWorld() const {
         groundFD.friction = 0.6f;
         groundFD.filter.categoryBits = 0x0001;
 
-        std::mt19937 gen(0);
-        std::uniform_real_distribution<> dis(-3.0, 4.0);
-        float hs[100];
-        for (int n = 0; n < 100; ++n) {
-            hs[n] = dis(gen);
+        std::array<float, 100> hs;
+        for (std::size_t n = 0; n < hs.size(); ++n) {
+            hs[n] = utils::random(-3.0f, 4.0f);
         }
 
         float x = -40.0f, y1 = 0.0f, dx = 8.0f;
 
-        for (int32 i = 0; i < 100; ++i) {
+        for (std::size_t i = 0; i < 100; ++i) {
             float y2 = hs[i] - 2.0f;
             shape.SetTwoSided(b2Vec2(x, y1), b2Vec2(x + dx, y2));
             ground->CreateFixture(&groundFD);

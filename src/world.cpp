@@ -41,7 +41,7 @@ void World::step() {
     world->SetContinuousPhysics(true);
 
     world->Step(timeStep, velocityIterations, positionIterations);
-    cars[0].CenterCamera();
+    cars[0].centerCamera();
 
     world->DebugDraw();
     g_debugDraw.Flush();
@@ -74,4 +74,13 @@ void World::initWorld() {
         y1 = y2;
         x += dx;
     }
+}
+
+std::vector<std::pair<Car::Distance, Car::Configuration>> World::getCarData() {
+    std::vector<std::pair<Car::Distance, Car::Configuration>> carData;
+    carData.reserve(cars.size());
+    for (auto& car : cars) {
+        carData.emplace_back(car.getDistance(), car.getConfiguration());
+    }
+    return carData;
 }

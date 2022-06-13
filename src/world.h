@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <vector>
+#include <utility>
 
 #include "car.h"
 
@@ -20,6 +21,7 @@ class World {
     ~World();
 
     void step();
+    std::vector<std::pair<Car::Distance, Car::Configuration>> getCarData();
 
   private:
     void initWorld();

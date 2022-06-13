@@ -24,8 +24,9 @@ class Car {
     Car(Car&& other);
     ~Car() = default;
 
-    void CenterCamera();
-    double GetDistance() const;
+    void centerCamera();
+    typedef double Distance;
+    Distance getDistance() const;
 
     Configuration getConfiguration() const;
     static constexpr auto maxVertices = 8;

@@ -32,9 +32,10 @@ class Window {
     static void glfwErrorCallback(int error, const char* description);
 
     static constexpr char* glslVersion = nullptr;
+    static constexpr int frameRate = 60;
+
     const std::chrono::duration<double> targetFrameDuration;
 
-    
     std::chrono::duration<double> frameTime;
     std::chrono::duration<double> sleepAdjust;
     std::chrono::steady_clock::time_point startFrameTimePoint;

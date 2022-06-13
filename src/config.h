@@ -6,4 +6,6 @@
 
 #pragma once
 
-constexpr int frameRate = 60;
+
+constexpr double crossoverProbability = 0.3;
+

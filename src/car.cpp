@@ -11,9 +11,8 @@
 #include "utils.h"
 
 Car::Car(b2World* wrld) {
-    int nVertices = utils::random(3, 8);
-    std::vector<b2Vec2> vertices;
-    vertices.reserve(maxVertices);
+    int nVertices = utils::random(3, maxVertices);
+    std::vector<b2Vec2> vertices(nVertices);
     for (size_t i = 0; std::cmp_less(i, nVertices); ++i) {
         auto x = utils::random(0.f, 8.f);
         auto y = utils::random(0.f, 8.f);
@@ -26,7 +25,10 @@ Car::Car(b2World* wrld) {
     while (wheel1Vertex == wheel2Vertex) {
         wheel2Vertex = randWheelNumber();
     }
-    configuration = {nVertices, std::move(vertices), wheel1Vertex, wheel2Vertex};
+
+    auto wheel1Radius = utils::random(0.2f, 1.0f);
+    auto wheel2Radius = utils::random(0.2f, 1.0f);
+    configuration = {std::move(vertices), wheel1Vertex, wheel2Vertex, wheel1Radius, wheel2Radius};
 
     world = wrld;
 
@@ -67,7 +69,8 @@ auto Car::getConfiguration() -> Configuration {
 
 void Car::initCar() {
     b2PolygonShape chassis;
-    chassis.Set(configuration.vertices.data(), configuration.nVertices);
+    auto nVertices = configuration.vertices.size();
+    chassis.Set(configuration.vertices.data(), nVertices);
 
     b2FixtureDef carFD;
     carFD.shape = &chassis;
@@ -84,23 +87,27 @@ void Car::initCar() {
     b2Vec2 wheel1Vec = configuration.vertices[static_cast<size_t>(configuration.wheel1Vertex)];
     b2Vec2 wheel2Vec = configuration.vertices[static_cast<size_t>(configuration.wheel2Vertex)];
 
-    b2CircleShape circle;
-    circle.m_radius = 0.4f;
+    b2CircleShape circle1;
+    circle1.m_radius = configuration.wheel1Radius;
 
-    b2FixtureDef fd;
-    fd.shape = &circle;
-    fd.density = 1.0f;
-    fd.friction = 0.9f;
-    fd.filter.categoryBits = carMask;
-    fd.filter.maskBits = 0x0001;
+    b2CircleShape circle2;
+    circle2.m_radius = configuration.wheel2Radius;
 
+    b2FixtureDef circleFD;
+    circleFD.density = 1.0f;
+    circleFD.friction = 0.9f;
+    circleFD.filter.categoryBits = carMask;
+    circleFD.filter.maskBits = 0x0001;
+
+    circleFD.shape = &circle1;
     bd.position.Set(wheel1Vec.x, wheel1Vec.y);
     m_wheel1 = world->CreateBody(&bd);
-    m_wheel1->CreateFixture(&fd);
+    m_wheel1->CreateFixture(&circleFD);
 
+    circleFD.shape = &circle2;
     bd.position.Set(wheel2Vec.x, wheel2Vec.y);
     m_wheel2 = world->CreateBody(&bd);
-    m_wheel2->CreateFixture(&fd);
+    m_wheel2->CreateFixture(&circleFD);
 
     b2WheelJointDef jd;
     b2Vec2 axis(0.0f, 1.0f);

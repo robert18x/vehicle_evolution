@@ -11,10 +11,11 @@
 class Car {
   public:
     struct Configuration {
-        int nVertices;
         std::vector<b2Vec2> vertices;
         int wheel1Vertex;
         int wheel2Vertex;
+        double wheel1Radius;
+        double wheel2Radius;
     };
 
     Car(b2World* wrld);
@@ -35,7 +36,7 @@ class Car {
     b2WheelJoint* m_spring2;
 
     static constexpr auto carMask = 0x0004;
-    static constexpr auto maxVertices = 10;
+    static constexpr auto maxVertices = 8;
     Configuration configuration;
 
     b2World* world;

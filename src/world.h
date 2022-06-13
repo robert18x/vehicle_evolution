@@ -19,15 +19,15 @@ class World {
     World(World&&) = delete;
     ~World();
 
-    void step() const;
+    void step();
 
   private:
-    void initWorld() const;
+    void initWorld();
 
+    std::vector<Car> cars;
+    b2Vec2 gravity;
+    b2World* world;
     float timeStep = 1.0f / 60.0f;
     int32 velocityIterations = 8;
     int32 positionIterations = 3;
-    b2World* world;
-    b2Vec2 gravity;
-    std::vector<Car> cars;
 };

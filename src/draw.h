@@ -90,6 +90,5 @@ public:
 
 extern DebugDraw g_debugDraw;
 extern Camera g_camera;
-extern GLFWwindow* g_mainWindow;
 
 #endif

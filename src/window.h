@@ -8,8 +8,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-#include <string>
+
 #include <chrono>
+#include <string>
+
 #include "window_size.h"
 
 class Window {

@@ -50,7 +50,7 @@ Car::Car(Car&& other) : m_car(other.m_car), m_wheel1(other.m_wheel1), m_wheel2(o
     other.m_spring2 = nullptr;
 }
 
-void Car::CenterCamera() const {
+void Car::CenterCamera() {
     g_camera.m_center.x = m_car->GetPosition().x;
 }
 
@@ -58,7 +58,7 @@ double Car::GetDistance() const {
     return m_car->GetPosition().x;
 }
 
-auto Car::getConfiguration() -> Configuration {
+auto Car::getConfiguration() const -> Configuration {
     return configuration;
 }
 

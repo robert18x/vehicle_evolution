@@ -22,9 +22,9 @@ class Car {
     Car(b2World* wrld, Configuration conf);
     Car(const Car&) = delete;
     Car(Car&& other);
-    ~Car() = default;
+    ~Car();
 
-    void centerCamera();
+    void centerCamera() const;
     typedef double Distance;
     Distance getDistance() const;
 

@@ -50,7 +50,16 @@ Car::Car(Car&& other) : m_car(other.m_car), m_wheel1(other.m_wheel1), m_wheel2(o
     other.m_spring2 = nullptr;
 }
 
-void Car::centerCamera() {
+Car::~Car() {
+    world->DestroyJoint(m_spring1);
+    world->DestroyJoint(m_spring2);
+
+    world->DestroyBody(m_wheel1);
+    world->DestroyBody(m_wheel2);
+    world->DestroyBody(m_car);
+}
+
+void Car::centerCamera() const {
     g_camera.m_center.x = m_car->GetPosition().x;
 }
 

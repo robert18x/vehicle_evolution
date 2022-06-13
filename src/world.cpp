@@ -26,6 +26,7 @@ World::World() : world(new b2World(gravity)) {
 }
 
 World::~World() {
+    cars.clear();
     delete world;
     world = nullptr;
     g_debugDraw.Destroy();

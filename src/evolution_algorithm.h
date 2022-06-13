@@ -24,6 +24,8 @@ class EvolutionAlgorithm {
     void crossover(std::vector<Car::Configuration>& configurations);
     Car::Configuration crossoverIndividuals(const Car::Configuration& first, const Car::Configuration& second);
     void mutate(std::vector<Car::Configuration>& configurations);
+    void mutateIndividual(Car::Configuration& individual);
 
-
+    template <typename T>
+    static T mutation(double a = 0.0, double b = 1.0);
 };

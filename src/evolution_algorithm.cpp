@@ -60,6 +60,38 @@ Car::Configuration EvolutionAlgorithm::crossoverIndividuals(const Car::Configura
     return crossoveredConfiguration;
 }
 
-void EvolutionAlgorithm::mutate(std::vector<Car::Configuration>& newConfigurations) {
+void EvolutionAlgorithm::mutate(std::vector<Car::Configuration>& configurations) {
+    std::for_each(std::execution::par_unseq, configurations.begin(), configurations.end(), [this] (auto& elem) {
+        if (utils::random(0.0, 1.0) <= mutationProbability) {
+            mutateIndividual(elem);
+        }
+    });
+}
 
+void EvolutionAlgorithm::mutateIndividual(Car::Configuration& individual) {
+
+    individual.wheel1Vertex += mutation<int>() % Car::maxVertices;
+    individual.wheel2Vertex += mutation<int>() % Car::maxVertices;
+    individual.wheel1Radius += mutation<double>();
+    individual.wheel2Radius += mutation<double>();
+
+    auto random = utils::random(0.0, 1.0);
+    if (random < 0.33 and individual.vertices.size() > 3) {
+        individual.vertices.pop_back();
+    } else if (random < 0.66 and individual.vertices.size() < Car::maxVertices) {
+        auto x = utils::random(0.f, 8.f);
+        auto y = utils::random(0.f, 8.f);
+        individual.vertices.emplace_back(x, y);
+    }
+
+    for (auto& vertices : individual.vertices) {
+        float x = vertices.x + mutation<float>();
+        float y = vertices.y + mutation<float>();
+        vertices.Set(x, y);
+    }
+}
+
+template <typename T>
+T EvolutionAlgorithm::mutation(double a, double b) {
+    return static_cast<T>(utils::normal_distribution(a, b) * mutationRate);
 }

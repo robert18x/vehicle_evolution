@@ -27,6 +27,7 @@ class Car {
     void CenterCamera() const;
 
     Configuration getConfiguration();
+    static constexpr auto maxVertices = 8;
 
   private:
     b2Body* m_car;
@@ -36,7 +37,6 @@ class Car {
     b2WheelJoint* m_spring2;
 
     static constexpr auto carMask = 0x0004;
-    static constexpr auto maxVertices = 8;
     Configuration configuration;
 
     b2World* world;

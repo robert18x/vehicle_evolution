@@ -19,7 +19,7 @@ void runProgram() {
     int epochTimeInSeconds = 15;
     EvolutionAlgorithm::Parameters evolutionParams = { 0.3, 0.7, 0.1 };
 
-    Window window("Vehicle evolution", {400, 400}, evolutionParams, epochTimeInSeconds);
+    Window window("Vehicle evolution", {800, 500}, evolutionParams, epochTimeInSeconds);
     int nCars = 100;
     World world(nCars);
 

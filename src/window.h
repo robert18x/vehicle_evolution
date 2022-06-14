@@ -5,7 +5,7 @@
  */
 
 #pragma once
-#include <glad/glad.h> // glad header need to be first because 
+#include <glad/glad.h> // glad header need to be first because
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
@@ -26,6 +26,7 @@ class Window {
     void newFrame();
     void renderFrame();
 
+    static constexpr int frameRate = 60;
   private:
     void initGlfwWindow(const std::string& name, const WindowSize& windowSize);
     void loadOpenglFunctions();
@@ -35,7 +36,6 @@ class Window {
     static void glfwErrorCallback(int error, const char* description);
 
     static constexpr char* glslVersion = nullptr;
-    static constexpr int frameRate = 60;
 
     const std::chrono::duration<double> targetFrameDuration;
 

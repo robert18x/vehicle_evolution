@@ -7,7 +7,6 @@
 #pragma once
 #include <box2d/box2d.h>
 
-#include <memory>
 #include <vector>
 #include <utility>
 
@@ -22,6 +21,7 @@ class World {
 
     void step();
     std::vector<std::pair<Car::Distance, Car::Configuration>> getCarData();
+    void createNewCars(const std::vector<Car::Configuration>& newCarConfigurations);
 
   private:
     void initWorld();

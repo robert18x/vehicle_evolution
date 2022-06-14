@@ -6,7 +6,9 @@
 
 #include "world.h"
 
+#include <algorithm>
 #include <array>
+#include <functional>
 
 #include "draw.h"
 #include "utils.h"
@@ -26,25 +28,10 @@ World::World() : world(new b2World(gravity)) {
 }
 
 World::~World() {
+    cars.clear();
     delete world;
     world = nullptr;
     g_debugDraw.Destroy();
-}
-
-void World::step() {
-    uint32 flags = 0;
-    flags += true * b2Draw::e_shapeBit;
-    g_debugDraw.SetFlags(flags);
-
-    world->SetAllowSleeping(true);
-    world->SetWarmStarting(true);
-    world->SetContinuousPhysics(true);
-
-    world->Step(timeStep, velocityIterations, positionIterations);
-    cars[0].centerCamera();
-
-    world->DebugDraw();
-    g_debugDraw.Flush();
 }
 
 void World::initWorld() {
@@ -76,6 +63,24 @@ void World::initWorld() {
     }
 }
 
+void World::step() {
+    uint32 flags = 0;
+    flags += true * b2Draw::e_shapeBit;
+    g_debugDraw.SetFlags(flags);
+
+    world->SetAllowSleeping(true);
+    world->SetWarmStarting(true);
+    world->SetContinuousPhysics(true);
+
+    world->Step(timeStep, velocityIterations, positionIterations);
+
+    auto bestCar = std::ranges::max_element(cars, {}, [](const Car& car) { return car.getDistance(); });
+    bestCar->centerCamera();
+
+    world->DebugDraw();
+    g_debugDraw.Flush();
+}
+
 std::vector<std::pair<Car::Distance, Car::Configuration>> World::getCarData() {
     std::vector<std::pair<Car::Distance, Car::Configuration>> carData;
     carData.reserve(cars.size());
@@ -83,4 +88,11 @@ std::vector<std::pair<Car::Distance, Car::Configuration>> World::getCarData() {
         carData.emplace_back(car.getDistance(), car.getConfiguration());
     }
     return carData;
+}
+
+void World::createNewCars(const std::vector<Car::Configuration>& newCarConfigurations) {
+    cars.clear();
+    for (auto& carConfiguration : newCarConfigurations) {
+        cars.emplace_back(world, carConfiguration);
+    }
 }

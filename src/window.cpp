@@ -81,7 +81,7 @@ void Window::createUI() {
 }
 
 void Window::glfwErrorCallback(int error, const char* description) {
-    fmt::print("GLFW error occured. Code: {}. Description: {}\n", error, description);
+    throw std::runtime_error(fmt::format("GLFW error occured. Code: {}. Description: {}\n", error, description));
 }
 
 bool Window::shouldClose() {
@@ -111,6 +111,7 @@ void Window::newFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    drawOptionsSubwindow();
 }
 
 void Window::drawOptionsSubwindow() {

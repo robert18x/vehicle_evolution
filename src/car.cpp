@@ -10,7 +10,7 @@
 #include "draw.h"
 #include "utils.h"
 
-Car::Car(b2World* wrld) {
+Car::Car(b2World* world) : world(world) {
     int nVertices = utils::random(3, maxVertices);
     std::vector<b2Vec2> vertices(nVertices);
     for (size_t i = 0; std::cmp_less(i, nVertices); ++i) {
@@ -30,31 +30,58 @@ Car::Car(b2World* wrld) {
     auto wheel2Radius = utils::random(0.2f, 1.0f);
     configuration = {std::move(vertices), wheel1Vertex, wheel2Vertex, wheel1Radius, wheel2Radius};
 
-    world = wrld;
-
     initCar();
 }
 
-Car::Car(b2World* wrld, Car::Configuration conf) {
-    world = wrld;
-    configuration = conf;
-
+Car::Car(b2World* world, Car::Configuration conf) : configuration(conf), world(world) {
     initCar();
 }
 
-Car::Car(Car&& other) : m_car(other.m_car), m_wheel1(other.m_wheel1), m_wheel2(other.m_wheel2), m_spring1(other.m_spring1), m_spring2(other.m_spring2) {
+Car::Car(Car&& other)
+    : configuration(other.configuration),
+      m_car(other.m_car),
+      m_wheel1(other.m_wheel1),
+      m_wheel2(other.m_wheel2),
+      m_spring1(other.m_spring1),
+      m_spring2(other.m_spring2),
+      world(other.world) {
     other.m_car = nullptr;
     other.m_wheel1 = nullptr;
     other.m_wheel2 = nullptr;
     other.m_spring1 = nullptr;
     other.m_spring2 = nullptr;
+    other.world = nullptr;
 }
 
-void Car::centerCamera() {
+Car::~Car() {
+    if (m_spring1 != nullptr) world->DestroyJoint(m_spring1);
+    if (m_spring2 != nullptr) world->DestroyJoint(m_spring2);
+
+    if (m_wheel1 != nullptr) world->DestroyBody(m_wheel1);
+    if (m_wheel2 != nullptr) world->DestroyBody(m_wheel2);
+    
+    if (m_car != nullptr) world->DestroyBody(m_car);
+}
+
+Car& Car::operator=(Car&& other) {
+    if (this == &other) {
+        return *this;
+    }
+    std::swap(configuration, other.configuration);
+    std::swap(m_car, other.m_car);
+    std::swap(m_wheel1, other.m_wheel1);
+    std::swap(m_wheel2, other.m_wheel2);
+    std::swap(m_spring1, other.m_spring1);
+    std::swap(m_spring2, other.m_spring2);
+    std::swap(world, other.world);
+    return *this;
+}
+
+void Car::centerCamera() const {
     g_camera.m_center.x = m_car->GetPosition().x;
 }
 
-auto Car::getDistance() const -> Distance{
+auto Car::getDistance() const -> Distance {
     return m_car->GetPosition().x;
 }
 

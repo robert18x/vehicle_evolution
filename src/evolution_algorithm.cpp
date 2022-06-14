@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <execution>
+#include <utility>
 #include <box2d/box2d.h>
 #include "utils.h"
 
@@ -91,12 +92,6 @@ void EvolutionAlgorithm::mutate(std::vector<Car::Configuration>& configurations)
 }
 
 void EvolutionAlgorithm::mutateIndividual(Car::Configuration& individual) {
-    auto& mr = parameters.mutationRate;
-    individual.wheel1Vertex += mutation<int>(mr) % Car::maxVertices;
-    individual.wheel2Vertex += mutation<int>(mr) % Car::maxVertices;
-    individual.wheel1Radius += mutation<double>(mr);
-    individual.wheel2Radius += mutation<double>(mr);
-
     auto random = utils::random(0.0, 1.0);
     if (random < 0.33 and individual.vertices.size() > 3) {
         individual.vertices.pop_back();
@@ -106,11 +101,17 @@ void EvolutionAlgorithm::mutateIndividual(Car::Configuration& individual) {
         individual.vertices.emplace_back(x, y);
     }
 
+    auto& mr = parameters.mutationRate;
     for (auto& vertices : individual.vertices) {
         float x = vertices.x + mutation<float>(mr);
         float y = vertices.y + mutation<float>(mr);
         vertices.Set(x, y);
     }
+
+    individual.wheel1Vertex = (individual.wheel1Vertex + mutation<int>(mr)) % individual.vertices.size();
+    individual.wheel2Vertex = (individual.wheel2Vertex + mutation<int>(mr)) % individual.vertices.size();
+    individual.wheel1Radius = std::min(individual.wheel1Radius + mutation<double>(mr), Car::maxWheelRadius);
+    individual.wheel2Radius = std::max(individual.wheel2Radius + mutation<double>(mr), Car::minWheelRadius);
 }
 
 template <typename T>

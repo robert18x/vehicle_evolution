@@ -14,7 +14,7 @@
 
 class World {
   public:
-    World();
+    World(std::size_t nCars);
     World(const World&) = delete;
     World(World&&) = delete;
     ~World();

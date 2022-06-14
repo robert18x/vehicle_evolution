@@ -33,34 +33,34 @@ Car::Car(b2World* world) : world(world) {
     initCar();
 }
 
-Car::Car(b2World* world, Car::Configuration conf) : configuration(conf), world(world) {
+Car::Car(b2World* world, Car::Configuration configuration) : configuration(configuration), world(world) {
     initCar();
 }
 
 Car::Car(Car&& other)
     : configuration(other.configuration),
-      m_car(other.m_car),
-      m_wheel1(other.m_wheel1),
-      m_wheel2(other.m_wheel2),
-      m_spring1(other.m_spring1),
-      m_spring2(other.m_spring2),
+      car(other.car),
+      wheel1(other.wheel1),
+      wheel2(other.wheel2),
+      spring1(other.spring1),
+      spring2(other.spring2),
       world(other.world) {
-    other.m_car = nullptr;
-    other.m_wheel1 = nullptr;
-    other.m_wheel2 = nullptr;
-    other.m_spring1 = nullptr;
-    other.m_spring2 = nullptr;
+    other.car = nullptr;
+    other.wheel1 = nullptr;
+    other.wheel2 = nullptr;
+    other.spring1 = nullptr;
+    other.spring2 = nullptr;
     other.world = nullptr;
 }
 
 Car::~Car() {
-    if (m_spring1 != nullptr) world->DestroyJoint(m_spring1);
-    if (m_spring2 != nullptr) world->DestroyJoint(m_spring2);
+    if (spring1 != nullptr) world->DestroyJoint(spring1);
+    if (spring2 != nullptr) world->DestroyJoint(spring2);
 
-    if (m_wheel1 != nullptr) world->DestroyBody(m_wheel1);
-    if (m_wheel2 != nullptr) world->DestroyBody(m_wheel2);
-    
-    if (m_car != nullptr) world->DestroyBody(m_car);
+    if (wheel1 != nullptr) world->DestroyBody(wheel1);
+    if (wheel2 != nullptr) world->DestroyBody(wheel2);
+
+    if (car != nullptr) world->DestroyBody(car);
 }
 
 Car& Car::operator=(Car&& other) {
@@ -68,21 +68,18 @@ Car& Car::operator=(Car&& other) {
         return *this;
     }
     std::swap(configuration, other.configuration);
-    std::swap(m_car, other.m_car);
-    std::swap(m_wheel1, other.m_wheel1);
-    std::swap(m_wheel2, other.m_wheel2);
-    std::swap(m_spring1, other.m_spring1);
-    std::swap(m_spring2, other.m_spring2);
+    std::swap(car, other.car);
+    std::swap(wheel1, other.wheel1);
+    std::swap(wheel2, other.wheel2);
+    std::swap(spring1, other.spring1);
+    std::swap(spring2, other.spring2);
     std::swap(world, other.world);
     return *this;
 }
 
-void Car::centerCamera() const {
-    g_camera.m_center.x = m_car->GetPosition().x;
-}
 
 auto Car::getDistance() const -> Distance {
-    return m_car->GetPosition().x;
+    return car->GetPosition().x;
 }
 
 auto Car::getConfiguration() const -> Configuration {
@@ -103,8 +100,8 @@ void Car::initCar() {
     b2BodyDef bd;
     bd.type = b2_dynamicBody;
     bd.position.Set(0.0f, 1.0f);
-    m_car = world->CreateBody(&bd);
-    m_car->CreateFixture(&carFD);
+    car = world->CreateBody(&bd);
+    car->CreateFixture(&carFD);
 
     b2Vec2 wheel1Vec = configuration.vertices[configuration.wheel1Vertex];
     b2Vec2 wheel2Vec = configuration.vertices[configuration.wheel2Vertex];
@@ -123,25 +120,25 @@ void Car::initCar() {
 
     circleFD.shape = &circle1;
     bd.position.Set(wheel1Vec.x, wheel1Vec.y);
-    m_wheel1 = world->CreateBody(&bd);
-    m_wheel1->CreateFixture(&circleFD);
+    wheel1 = world->CreateBody(&bd);
+    wheel1->CreateFixture(&circleFD);
 
     circleFD.shape = &circle2;
     bd.position.Set(wheel2Vec.x, wheel2Vec.y);
-    m_wheel2 = world->CreateBody(&bd);
-    m_wheel2->CreateFixture(&circleFD);
+    wheel2 = world->CreateBody(&bd);
+    wheel2->CreateFixture(&circleFD);
 
     b2WheelJointDef jd;
     b2Vec2 axis(0.0f, 1.0f);
 
-    float mass1 = m_wheel1->GetMass();
-    float mass2 = m_wheel2->GetMass();
+    float mass1 = wheel1->GetMass();
+    float mass2 = wheel2->GetMass();
 
     float hertz = 4.0f;
     float dampingRatio = 0.7f;
     float omega = 2.0f * b2_pi * hertz;
 
-    jd.Initialize(m_car, m_wheel1, m_wheel1->GetPosition(), axis);
+    jd.Initialize(car, wheel1, wheel1->GetPosition(), axis);
     jd.motorSpeed = 0.0f;
     jd.maxMotorTorque = 20.0f;
     jd.enableMotor = true;
@@ -150,9 +147,9 @@ void Car::initCar() {
     jd.lowerTranslation = -0.25f;
     jd.upperTranslation = 0.25f;
     jd.enableLimit = true;
-    m_spring1 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
+    spring1 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
 
-    jd.Initialize(m_car, m_wheel2, m_wheel2->GetPosition(), axis);
+    jd.Initialize(car, wheel2, wheel2->GetPosition(), axis);
     jd.motorSpeed = 0.0f;
     jd.maxMotorTorque = 10.0f;
     jd.enableMotor = false;
@@ -161,7 +158,7 @@ void Car::initCar() {
     jd.lowerTranslation = -0.25f;
     jd.upperTranslation = 0.25f;
     jd.enableLimit = true;
-    m_spring2 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
+    spring2 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
 
-    m_spring1->SetMotorSpeed(-25.0f);
+    spring1->SetMotorSpeed(-25.0f);
 }

@@ -13,11 +13,10 @@
 #include "draw.h"
 #include "utils.h"
 
-World::World() : world(new b2World(gravity)) {
+World::World(std::size_t nCars) : world(new b2World(gravity)) {
     gravity.Set(0.0f, -9.81f);
     world->SetGravity(gravity);
     world->SetDebugDraw(&g_debugDraw);
-    std::size_t nCars = 5;
     cars.reserve(nCars);
     for (std::size_t i = 0; i < nCars; ++i) {
         cars.emplace_back(world);
@@ -75,7 +74,7 @@ void World::step() {
     world->Step(timeStep, velocityIterations, positionIterations);
 
     auto bestCar = std::ranges::max_element(cars, {}, [](const Car& car) { return car.getDistance(); });
-    bestCar->centerCamera();
+    g_camera.m_center.x = std::max(g_camera.m_center.x, bestCar->getDistance()); // dodane, by kamera poruszała się tylko do przodu
 
     world->DebugDraw();
     g_debugDraw.Flush();
@@ -95,4 +94,5 @@ void World::createNewCars(const std::vector<Car::Configuration>& newCarConfigura
     for (auto& carConfiguration : newCarConfigurations) {
         cars.emplace_back(world, carConfiguration);
     }
+    g_camera.m_center.x = 0; // ustawianie kamery na nowo przy stworzonych autach
 }

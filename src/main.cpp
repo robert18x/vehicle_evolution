@@ -17,9 +17,10 @@
 
 void runProgram() {
     Window window("Vehicle evolution", {400, 400});
-    World world;
+    int nCars = 100;
+    World world(nCars);
 
-    int epochTimeInSeconds = 5;
+    int epochTimeInSeconds = 15;
     EvolutionAlgorithm::Parameters evolutionParams = { 0.3, 0.7, 0.1 };
 
     std::chrono::steady_clock::time_point epochStart = std::chrono::steady_clock::now();

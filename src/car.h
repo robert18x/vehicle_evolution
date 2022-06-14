@@ -19,31 +19,32 @@ class Car {
     };
 
     Car(b2World* world);
-    Car(b2World* world, Configuration conf);
+    Car(b2World* world, Configuration configuration);
     Car(const Car&) = delete;
     Car(Car&& other);
     ~Car();
     Car& operator=(const Car&) = delete;
     Car& operator=(Car&&);
 
-    void centerCamera() const;
-    typedef double Distance;
+    typedef float Distance;
     Distance getDistance() const;
 
     Configuration getConfiguration() const;
-    static constexpr auto maxVertices = 8;
+
+    static constexpr int maxVertices = 8;
+    static constexpr double minWheelRadius = 0.2;
+    static constexpr double maxWheelRadius = 1.0;
 
   private:
     void initCar();
-    static constexpr auto carMask = 0x0004;
+
+    static constexpr int carMask = 0x0004;
 
     Configuration configuration;
-
-    b2Body* m_car;
-    b2Body* m_wheel1;
-    b2Body* m_wheel2;
-    b2WheelJoint* m_spring1;
-    b2WheelJoint* m_spring2;
-
+    b2Body* car;
+    b2Body* wheel1;
+    b2Body* wheel2;
+    b2WheelJoint* spring1;
+    b2WheelJoint* spring2;
     b2World* world;
 };

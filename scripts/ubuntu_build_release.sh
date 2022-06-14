@@ -11,5 +11,4 @@ cmake --build . --config Release --target all -- -j $BUILD_THREADS
 cd ..
 mkdir -p bin
 cp build/src/vehicle_evolution bin/vehicle_evolution
-cp build/test/vehicle_evolution_test bin/vehicle_evolution_test
 mv src/doxygen bin/doxygen

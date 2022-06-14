@@ -9,6 +9,7 @@
 
 #include "draw.h"
 #include "utils.h"
+#include "world.h"
 
 /**
  * @brief Construct a new Car:: Car object
@@ -116,7 +117,7 @@ void Car::initCar() {
     carFD.shape = &chassis;
     carFD.density = carDensity;
     carFD.filter.categoryBits = carMask;
-    carFD.filter.maskBits = groundMask;
+    carFD.filter.maskBits = World::groundMask;
 
     b2BodyDef bd;
     bd.type = b2_dynamicBody;
@@ -138,7 +139,7 @@ void Car::initCar() {
     circleFD.density = wheelDensity;
     circleFD.friction = wheelFriction;
     circleFD.filter.categoryBits = carMask;
-    circleFD.filter.maskBits = groundMask;
+    circleFD.filter.maskBits = World::groundMask;
 
     circleFD.shape = &circle1;
     bd.position.Set(wheel1Vec.x, wheel1Vec.y);

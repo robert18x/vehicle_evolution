@@ -54,9 +54,8 @@ class Car {
     b2WheelJoint* spring2;
     b2World* world;
 
-    static constexpr int groundMask = 0x0001;  // Move somewhere else
     static constexpr float worldAxisX = 0.0f;
-    static constexpr float worldAxisY = 1.0f;  //
+    static constexpr float worldAxisY = 1.0f;
     static constexpr float carDensity = 1.0f;
     static constexpr float carStartX = 0.0f;
     static constexpr float carStartY = 1.0f;

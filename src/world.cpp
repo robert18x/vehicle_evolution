@@ -43,8 +43,9 @@ void World::step() {
     world->SetContinuousPhysics(true);
 
     world->Step(timeStep, velocityIterations, positionIterations);
-    std::ranges::stable_sort(cars, std::ranges::greater_equal(), [](const Car& car) { return car.getDistance(); });
-    cars.begin()->centerCamera();
+
+    auto bestCar = std::ranges::max_element(cars, {}, [](const Car& car) { return car.getDistance(); });
+    bestCar->centerCamera();
 
     world->DebugDraw();
     g_debugDraw.Flush();

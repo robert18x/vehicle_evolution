@@ -7,7 +7,8 @@
 #include "world.h"
 
 #include <array>
-
+#include <algorithm>
+#include <functional>
 #include "draw.h"
 #include "utils.h"
 
@@ -42,7 +43,8 @@ void World::step() {
     world->SetContinuousPhysics(true);
 
     world->Step(timeStep, velocityIterations, positionIterations);
-    cars[0].centerCamera();
+    std::ranges::stable_sort(cars, std::ranges::greater_equal(), [](const Car& car) { return car.getDistance(); });
+    cars.begin()->centerCamera();
 
     world->DebugDraw();
     g_debugDraw.Flush();

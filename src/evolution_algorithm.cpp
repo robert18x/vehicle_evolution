@@ -57,7 +57,7 @@ Car::Configuration EvolutionAlgorithm::tournamentSelection(const std::vector<std
 
 void EvolutionAlgorithm::crossover(std::vector<Car::Configuration>& configurations) {
     std::vector<Car::Configuration> originalConfigurations = configurations;
-    std::for_each(configurations.begin(), configurations.end(), [this, &originalConfigurations] (auto& elem) {
+    std::for_each(std::execution::par_unseq, configurations.begin(), configurations.end(), [this, &originalConfigurations] (auto& elem) {
         if (utils::random(0.0, 1.0) <= parameters.crossoverProbability) {
             auto otherElemIndex = utils::random<std::size_t>(0, originalConfigurations.size() - 1);
             auto& otherElem = originalConfigurations[otherElemIndex];
@@ -93,7 +93,7 @@ Car::Configuration EvolutionAlgorithm::crossoverIndividuals(const Car::Configura
 }
 
 void EvolutionAlgorithm::mutate(std::vector<Car::Configuration>& configurations) {
-    std::for_each(configurations.begin(), configurations.end(), [this] (auto& elem) {
+    std::for_each(std::execution::par_unseq, configurations.begin(), configurations.end(), [this] (auto& elem) {
         if (utils::random(0.0, 1.0) <= parameters.mutationProbability) {
             mutateIndividual(elem);
         }

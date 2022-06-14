@@ -107,6 +107,7 @@ auto Car::getConfiguration() const -> Configuration {
 }
 
 void Car::initCar() {
+    // main body
     b2PolygonShape chassis;
     auto nVertices = configuration.vertices.size();
     chassis.Set(configuration.vertices.data(), nVertices);
@@ -126,6 +127,7 @@ void Car::initCar() {
     b2Vec2 wheel1Vec = configuration.vertices[configuration.wheel1Vertex];
     b2Vec2 wheel2Vec = configuration.vertices[configuration.wheel2Vertex];
 
+    // wheels
     b2CircleShape circle1;
     circle1.m_radius = configuration.wheel1Radius;
 
@@ -148,6 +150,7 @@ void Car::initCar() {
     wheel2 = world->CreateBody(&bd);
     wheel2->CreateFixture(&circleFD);
 
+    // joints connecting wheels with main body
     b2WheelJointDef jd;
     b2Vec2 axis(worldAxisX, worldAxisY);
 

@@ -38,6 +38,10 @@ World::~World() {
     g_debugDraw.Destroy();
 }
 
+/**
+ * @brief Create random path on which vehicles will ride on.
+ *
+ */
 void World::initWorld() {
     b2Body* ground = nullptr;
     b2BodyDef bd;

@@ -7,8 +7,8 @@
 #pragma once
 #include <box2d/box2d.h>
 
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "car.h"
 
@@ -32,4 +32,14 @@ class World {
     float timeStep = 1.0f / 60.0f;
     int32 velocityIterations = 8;
     int32 positionIterations = 3;
+
+    static constexpr float groundDensity = 0.0f;
+    static constexpr float groundFriction = 0.6f;
+    static constexpr int groundMask = 0x0001;
+    static constexpr int groundSegments = 100;
+    static constexpr float groundLowPoint = -5.0f;
+    static constexpr float groundHighPoint = 2.0f;
+    static constexpr float groundStartX = -40.0f;
+    static constexpr float groundStartY = 0.0f;
+    static constexpr float groundSegmentLength = 8.0f;
 };

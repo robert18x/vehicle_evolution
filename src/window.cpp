@@ -23,6 +23,14 @@
 #include "../bindings/imgui_impl_opengl3.h"
 #endif
 
+/**
+ * @brief Construct a new Window:: Window object
+ *
+ * @param name - name of the window.
+ * @param windowSize - size of the window.
+ * @param evolutionParams - initial parameters of evolution algorithm.
+ * @param epochTimeInSeconds - how many seconds each epoch will last.
+ */
 Window::Window(const std::string& name, const WindowSize& windowSize, EvolutionAlgorithm::Parameters& evolutionParams, int& epochTimeInSeconds)
     : targetFrameDuration(1.0 / static_cast<double>(frameRate)),
       frameTime(0.0),
@@ -89,10 +97,20 @@ void Window::glfwErrorCallback(int error, const char* description) {
     throw std::runtime_error(fmt::format("GLFW error occured. Code: {}. Description: {}\n", error, description));
 }
 
+/**
+ * @brief Tells if window should close or not.
+ *
+ * @return true
+ * @return false
+ */
 bool Window::shouldClose() {
     return glfwWindowShouldClose(window);
 }
 
+/**
+ * @brief Render new frame for the window.
+ *
+ */
 void Window::renderFrame() {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -109,6 +127,10 @@ void Window::renderFrame() {
     sleepAdjust = 0.9 * sleepAdjust + 0.1 * (targetFrameDuration - frameTime);
 }
 
+/**
+ * @brief Create new clear frame for the window.
+ *
+ */
 void Window::newFrame() {
     startFrameTimePoint = std::chrono::steady_clock::now();
     setWindowsSize();

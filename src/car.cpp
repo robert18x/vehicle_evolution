@@ -10,6 +10,11 @@
 #include "draw.h"
 #include "utils.h"
 
+/**
+ * @brief Construct a new Car:: Car object
+ *
+ * @param world - pointer to b2World in which car will be created.
+ */
 Car::Car(b2World* world) : world(world) {
     int nVertices = utils::random(minVertices, maxVertices);
     std::vector<b2Vec2> vertices(nVertices);
@@ -33,6 +38,12 @@ Car::Car(b2World* world) : world(world) {
     initCar();
 }
 
+/**
+ * @brief Construct a new Car:: Car object
+ *
+ * @param world - pointer to b2World in which car will be created.
+ * @param configuration - configuration from which call should be created.
+ */
 Car::Car(b2World* world, const Car::Configuration configuration) : configuration(configuration), world(world) {
     initCar();
 }
@@ -77,10 +88,20 @@ Car& Car::operator=(Car&& other) {
     return *this;
 }
 
+/**
+ * @brief Get the distance from the starting point.
+ *
+ * @return Distance
+ */
 auto Car::getDistance() const -> Distance {
     return car->GetPosition().x;
 }
 
+/**
+ * @brief Get configuration of the car.
+ *
+ * @return Configuration
+ */
 auto Car::getConfiguration() const -> Configuration {
     return configuration;
 }

@@ -13,6 +13,11 @@
 #include "draw.h"
 #include "utils.h"
 
+/**
+ * @brief Construct a new World:: World object
+ *
+ * @param nCars - how many cars should be created in the world.
+ */
 World::World(std::size_t nCars) : world(new b2World(gravity)) {
     gravity.Set(0.0f, -9.81f);
     world->SetGravity(gravity);
@@ -62,6 +67,10 @@ void World::initWorld() {
     }
 }
 
+/**
+ * @brief Move everything by one step and draw updated world.
+ *
+ */
 void World::step() {
     uint32 flags = 0;
     flags += true * b2Draw::e_shapeBit;
@@ -80,6 +89,11 @@ void World::step() {
     g_debugDraw.Flush();
 }
 
+/**
+ * @brief Get all necessary information about the cars.
+ *
+ * @return std::vector<std::pair<Car::Distance, Car::Configuration>>
+ */
 std::vector<std::pair<Car::Distance, Car::Configuration>> World::getCarData() {
     std::vector<std::pair<Car::Distance, Car::Configuration>> carData;
     carData.reserve(cars.size());
@@ -89,6 +103,11 @@ std::vector<std::pair<Car::Distance, Car::Configuration>> World::getCarData() {
     return carData;
 }
 
+/**
+ * @brief Swap current cars with cars created from configurations.
+ *
+ * @param newCarConfigurations - configurations of cars that will be created.
+ */
 void World::createNewCars(const std::vector<Car::Configuration>& newCarConfigurations) {
     cars.clear();
     for (auto& carConfiguration : newCarConfigurations) {

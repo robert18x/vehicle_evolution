@@ -9,7 +9,7 @@
 
 #include <utility>
 #include <vector>
-
+#include "window.h"
 #include "car.h"
 
 class World {
@@ -22,20 +22,20 @@ class World {
     void step();
     std::vector<std::pair<Car::Distance, Car::Configuration>> getCarData();
     void createNewCars(const std::vector<Car::Configuration>& newCarConfigurations);
-
+    
+    static constexpr int groundMask = 0x0001;
   private:
     void initWorld();
 
     std::vector<Car> cars;
     b2Vec2 gravity;
     b2World* world;
-    float timeStep = 1.0f / 60.0f;
-    int32 velocityIterations = 8;
-    int32 positionIterations = 3;
+    const float timeStep = 1.0f / Window::frameRate;
+    const int32 velocityIterations = 8;
+    const int32 positionIterations = 3;
 
     static constexpr float groundDensity = 0.0f;
     static constexpr float groundFriction = 0.6f;
-    static constexpr int groundMask = 0x0001;
     static constexpr int groundSegments = 100;
     static constexpr float groundLowPoint = -5.0f;
     static constexpr float groundHighPoint = 2.0f;

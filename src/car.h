@@ -35,6 +35,10 @@ class Car {
     static constexpr int minVertices = 3;
     static constexpr double minWheelRadius = 0.2;
     static constexpr double maxWheelRadius = 1.0;
+    static constexpr float minCarX = 0.0f;
+    static constexpr float maxCarX = 8.0f;
+    static constexpr float minCarY = 3.0f;
+    static constexpr float maxCarY = 11.0f;
 
   private:
     void initCar();
@@ -53,10 +57,6 @@ class Car {
     static constexpr int groundMask = 0x0001;  // Move somewhere else
     static constexpr float worldAxisX = 0.0f;
     static constexpr float worldAxisY = 1.0f;  //
-    static constexpr float minCarX = 0.0f;
-    static constexpr float maxCarX = 8.0f;
-    static constexpr float minCarY = 3.0f;
-    static constexpr float maxCarY = 11.0f;
     static constexpr float carDensity = 1.0f;
     static constexpr float carStartX = 0.0f;
     static constexpr float carStartY = 1.0f;

@@ -21,6 +21,7 @@ class World {
 
     void step();
     std::vector<std::pair<Car::Distance, Car::Configuration>> getCarData();
+    void createNewCars(const std::vector<Car::Configuration>& newCarConfigurations);
 
   private:
     void initWorld();

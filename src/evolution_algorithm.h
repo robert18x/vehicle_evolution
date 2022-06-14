@@ -11,7 +11,13 @@
 
 class EvolutionAlgorithm {
   public:
-    EvolutionAlgorithm();
+    struct Parameters {
+        double crossoverProbability;
+        double mutationProbability;
+        double mutationRate;
+    };
+
+    EvolutionAlgorithm(Parameters parameters);
 
     ~EvolutionAlgorithm() = default;
     EvolutionAlgorithm(const EvolutionAlgorithm&) = delete;
@@ -26,5 +32,7 @@ class EvolutionAlgorithm {
     void mutateIndividual(Car::Configuration& individual);
 
     template <typename T>
-    static T mutation(double a = 0.0, double b = 1.0);
+    static T mutation(double mutationRate, double a = 0.0, double b = 1.0);
+
+    Parameters parameters;
 };

@@ -11,11 +11,11 @@
 #include "utils.h"
 
 Car::Car(b2World* world) : world(world) {
-    int nVertices = utils::random(3, maxVertices);
+    int nVertices = utils::random(minVertices, maxVertices);
     std::vector<b2Vec2> vertices(nVertices);
     for (size_t i = 0; std::cmp_less(i, nVertices); ++i) {
-        auto x = utils::random(0.f, 8.f);
-        auto y = utils::random(3.f, 11.f);
+        auto x = utils::random(minCarX, maxCarX);
+        auto y = utils::random(minCarY, maxCarY);
         vertices[i].Set(x, y);
     }
 
@@ -26,14 +26,14 @@ Car::Car(b2World* world) : world(world) {
         wheel2Vertex = randWheelNumber();
     }
 
-    auto wheel1Radius = utils::random(0.2f, 1.0f);
-    auto wheel2Radius = utils::random(0.2f, 1.0f);
+    auto wheel1Radius = utils::random(minWheelRadius, maxWheelRadius);
+    auto wheel2Radius = utils::random(minWheelRadius, maxWheelRadius);
     configuration = {std::move(vertices), wheel1Vertex, wheel2Vertex, wheel1Radius, wheel2Radius};
 
     initCar();
 }
 
-Car::Car(b2World* world, Car::Configuration configuration) : configuration(configuration), world(world) {
+Car::Car(b2World* world, const Car::Configuration configuration) : configuration(configuration), world(world) {
     initCar();
 }
 
@@ -77,7 +77,6 @@ Car& Car::operator=(Car&& other) {
     return *this;
 }
 
-
 auto Car::getDistance() const -> Distance {
     return car->GetPosition().x;
 }
@@ -93,13 +92,13 @@ void Car::initCar() {
 
     b2FixtureDef carFD;
     carFD.shape = &chassis;
-    carFD.density = 1.0f;
+    carFD.density = carDensity;
     carFD.filter.categoryBits = carMask;
-    carFD.filter.maskBits = 0x0001;
+    carFD.filter.maskBits = groundMask;
 
     b2BodyDef bd;
     bd.type = b2_dynamicBody;
-    bd.position.Set(0.0f, 1.0f);
+    bd.position.Set(carStartX, carStartY);
     car = world->CreateBody(&bd);
     car->CreateFixture(&carFD);
 
@@ -113,10 +112,10 @@ void Car::initCar() {
     circle2.m_radius = configuration.wheel2Radius;
 
     b2FixtureDef circleFD;
-    circleFD.density = 1.0f;
-    circleFD.friction = 0.9f;
+    circleFD.density = wheelDensity;
+    circleFD.friction = wheelFriction;
     circleFD.filter.categoryBits = carMask;
-    circleFD.filter.maskBits = 0x0001;
+    circleFD.filter.maskBits = groundMask;
 
     circleFD.shape = &circle1;
     bd.position.Set(wheel1Vec.x, wheel1Vec.y);
@@ -129,36 +128,28 @@ void Car::initCar() {
     wheel2->CreateFixture(&circleFD);
 
     b2WheelJointDef jd;
-    b2Vec2 axis(0.0f, 1.0f);
+    b2Vec2 axis(worldAxisX, worldAxisY);
 
     float mass1 = wheel1->GetMass();
     float mass2 = wheel2->GetMass();
 
-    float hertz = 4.0f;
-    float dampingRatio = 0.7f;
-    float omega = 2.0f * b2_pi * hertz;
-
     jd.Initialize(car, wheel1, wheel1->GetPosition(), axis);
-    jd.motorSpeed = 0.0f;
-    jd.maxMotorTorque = 20.0f;
-    jd.enableMotor = true;
-    jd.stiffness = mass1 * omega * omega;
-    jd.damping = 2.0f * mass1 * dampingRatio * omega;
-    jd.lowerTranslation = -0.25f;
-    jd.upperTranslation = 0.25f;
-    jd.enableLimit = true;
+    initJoint(jd, mass1);
     spring1 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
 
     jd.Initialize(car, wheel2, wheel2->GetPosition(), axis);
-    jd.motorSpeed = 0.0f;
-    jd.maxMotorTorque = 10.0f;
-    jd.enableMotor = false;
-    jd.stiffness = mass2 * omega * omega;
-    jd.damping = 2.0f * mass2 * dampingRatio * omega;
-    jd.lowerTranslation = -0.25f;
-    jd.upperTranslation = 0.25f;
-    jd.enableLimit = true;
+    initJoint(jd, mass2);
     spring2 = static_cast<b2WheelJoint*>(world->CreateJoint(&jd));
 
-    spring1->SetMotorSpeed(-25.0f);
+    spring1->SetMotorSpeed(motorSpeed);
+}
+
+void Car::initJoint(b2WheelJointDef& jd, float mass) const {
+    jd.maxMotorTorque = maxSpringMotorTorque;
+    jd.enableMotor = true;
+    jd.stiffness = mass * springOmega * springOmega;
+    jd.damping = mass * springDampingRatio * springOmega;
+    jd.lowerTranslation = springLowerTranslation;
+    jd.upperTranslation = springUpperTranslation;
+    jd.enableLimit = true;
 }

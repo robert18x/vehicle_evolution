@@ -16,16 +16,14 @@
 EvolutionAlgorithm::EvolutionAlgorithm(Parameters parameters) : parameters(parameters) {}
 
 
-std::vector<Car::Configuration> EvolutionAlgorithm::evolve(std::vector<std::pair<Car::Distance, Car::Configuration>>& previousConfigurations) {
-    std::sort(std::execution::par_unseq, previousConfigurations.begin(), previousConfigurations.end(),
-              [](auto& elem1, auto& elem2) { return elem1.first >= elem2.first; });
+std::vector<Car::Configuration> EvolutionAlgorithm::evolve(const std::vector<std::pair<Car::Distance, Car::Configuration>>& previousConfigurations) {
     std::vector<Car::Configuration> newConfigurations = select(previousConfigurations);
     crossover(newConfigurations);
     mutate(newConfigurations);
     return newConfigurations;
 }
 
-std::vector<Car::Configuration> EvolutionAlgorithm::select(std::vector<std::pair<Car::Distance, Car::Configuration>>& previousConfigurations) {
+std::vector<Car::Configuration> EvolutionAlgorithm::select(const std::vector<std::pair<Car::Distance, Car::Configuration>>& previousConfigurations) {
     std::vector<Car::Configuration> newConfigurations(previousConfigurations.size());
     std::for_each(std::execution::par_unseq, newConfigurations.begin(), newConfigurations.end(), [this, &previousConfigurations] (auto& elem) {
         elem = tournamentSelection(previousConfigurations);

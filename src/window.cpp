@@ -142,7 +142,7 @@ void Window::newFrame() {
 }
 
 void Window::drawOptionsSubwindow() {
-    static constexpr float subwindowWidth = 300.f;
+    static constexpr float subwindowWidth = 350.f;
     static constexpr float subwindowHeight = 150.f;
     static constexpr float windowMargin = 10.f;
     auto inputFormat = "%.2f";
@@ -156,8 +156,8 @@ void Window::drawOptionsSubwindow() {
     ImGui::End();
 
     evolutionParams.crossoverProbability = utils::getValueFromRange(0.0, evolutionParams.crossoverProbability, 1.0);
-    evolutionParams.crossoverProbability = utils::getValueFromRange(0.0, evolutionParams.crossoverProbability, 1.0);
-    evolutionParams.mutationRate = utils::getValueFromRange(0.0, evolutionParams.mutationRate, 5.0);
+    evolutionParams.mutationProbability = utils::getValueFromRange(0.0, evolutionParams.mutationProbability, 1.0);
+    evolutionParams.mutationRate = utils::getValueFromRange(0.0, evolutionParams.mutationRate, 2.0);
     epochTimeInSeconds = std::max(0, epochTimeInSeconds);
 }
 

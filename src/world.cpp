@@ -42,18 +42,18 @@ void World::initWorld() {
 
     b2FixtureDef groundFD;
     groundFD.shape = &shape;
-    groundFD.density = 0.0f;
-    groundFD.friction = 0.6f;
-    groundFD.filter.categoryBits = 0x0001;
+    groundFD.density = groundDensity;
+    groundFD.friction = groundFriction;
+    groundFD.filter.categoryBits = groundMask;
 
-    std::array<float, 100> hs;
+    std::array<float, groundSegments> hs;
     for (std::size_t n = 0; n < hs.size(); ++n) {
-        hs[n] = utils::random(-5.0f, 2.0f);
+        hs[n] = utils::random(groundLowPoint, groundHighPoint);
     }
 
-    float x = -40.0f, y1 = 0.0f, dx = 8.0f;
+    float x = groundStartX, y1 = groundStartY, dx = groundSegmentLength;
 
-    for (std::size_t i = 0; i < 100; ++i) {
+    for (std::size_t i = 0; i < groundSegments; ++i) {
         float y2 = hs[i];
         shape.SetTwoSided(b2Vec2(x, y1), b2Vec2(x + dx, y2));
         ground->CreateFixture(&groundFD);
@@ -74,7 +74,7 @@ void World::step() {
     world->Step(timeStep, velocityIterations, positionIterations);
 
     auto bestCar = std::ranges::max_element(cars, {}, [](const Car& car) { return car.getDistance(); });
-    g_camera.m_center.x = std::max(g_camera.m_center.x, bestCar->getDistance()); // dodane, by kamera poruszała się tylko do przodu
+    g_camera.m_center.x = std::max(g_camera.m_center.x, bestCar->getDistance());  // camera is moving only forward
 
     world->DebugDraw();
     g_debugDraw.Flush();
@@ -94,5 +94,5 @@ void World::createNewCars(const std::vector<Car::Configuration>& newCarConfigura
     for (auto& carConfiguration : newCarConfigurations) {
         cars.emplace_back(world, carConfiguration);
     }
-    g_camera.m_center.x = 0; // ustawianie kamery na nowo przy stworzonych autach
+    g_camera.m_center.x = 0;  // camera position for newly created veihicles
 }

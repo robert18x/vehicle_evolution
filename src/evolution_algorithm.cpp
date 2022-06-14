@@ -96,8 +96,8 @@ void EvolutionAlgorithm::mutateIndividual(Car::Configuration& individual) {
     if (random < 0.33 and individual.vertices.size() > 3) {
         individual.vertices.pop_back();
     } else if (random < 0.66 and individual.vertices.size() < Car::maxVertices) {
-        float x = utils::random(0.f, 8.f);
-        float y = utils::random(0.f, 8.f);
+        float x = utils::random(Car::minCarX, Car::maxCarX);
+        float y = utils::random(Car::minCarY, Car::maxCarY);
         individual.vertices.emplace_back(x, y);
     }
 

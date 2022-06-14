@@ -13,9 +13,20 @@
 #include <box2d/box2d.h>
 #include "utils.h"
 
+/**
+ * @brief Construct a new Evolution Algorithm:: Evolution Algorithm object
+ *
+ * @param parameters - parameters of evolution algorithm.
+ */
 EvolutionAlgorithm::EvolutionAlgorithm(Parameters parameters) : parameters(parameters) {}
 
 
+/**
+ * @brief take one step of evolution algorithm.
+ *
+ * @param previousConfigurations - configurations on which evolution will be done.
+ * @return std::vector<Car::Configuration>
+ */
 std::vector<Car::Configuration> EvolutionAlgorithm::evolve(std::vector<std::pair<Car::Distance, Car::Configuration>>& previousConfigurations) {
     std::sort(std::execution::par_unseq, previousConfigurations.begin(), previousConfigurations.end(),
               [](auto& elem1, auto& elem2) { return elem1.first >= elem2.first; });

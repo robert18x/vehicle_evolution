@@ -26,4 +26,9 @@ T normal_distribution(T a, T b) {
     return normalDistrib(gen);
 }
 
+template <typename T>
+T getValueFromRange(T a, T value, T b) {
+    return std::max(a, std::min(value, b));
+}
+
 }

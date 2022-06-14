@@ -5,18 +5,19 @@
  */
 
 #pragma once
-#include <glad/glad.h>
+#include <glad/glad.h> // glad header need to be first because 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
 #include <chrono>
 #include <string>
 
+#include "evolution_algorithm.h"
 #include "window_size.h"
 
 class Window {
   public:
-    explicit Window(const std::string& name, const WindowSize& windowSize);
+    explicit Window(const std::string& name, const WindowSize& windowSize, EvolutionAlgorithm::Parameters& evolutionParams, int& epochTimeInSeconds);
     Window(const Window&) = delete;
     Window(Window&&) = delete;
     ~Window();
@@ -43,4 +44,6 @@ class Window {
     std::chrono::steady_clock::time_point startFrameTimePoint;
     std::chrono::steady_clock::time_point endFrameTimePoint;
     GLFWwindow* window;
+    EvolutionAlgorithm::Parameters& evolutionParams;
+    int& epochTimeInSeconds;
 };

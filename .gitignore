@@ -6,4 +6,4 @@ bindings/
 .vs/
 CMakeSettings.json
 imgui.ini
-
+doxygen

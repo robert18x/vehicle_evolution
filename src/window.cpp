@@ -13,8 +13,8 @@
 #include <stdexcept>
 #include <thread>
 
-#include "config.h"
 #include "draw.h"
+#include "utils.h"
 #ifdef _WIN32
 #include "../out/build/bindings/imgui_impl_glfw.h"
 #include "../out/build/bindings/imgui_impl_opengl3.h"
@@ -23,8 +23,12 @@
 #include "../bindings/imgui_impl_opengl3.h"
 #endif
 
-Window::Window(const std::string& name, const WindowSize& windowSize)
-    : targetFrameDuration(1.0 / static_cast<double>(frameRate)), frameTime(0.0), sleepAdjust(0.0) {
+Window::Window(const std::string& name, const WindowSize& windowSize, EvolutionAlgorithm::Parameters& evolutionParams, int& epochTimeInSeconds)
+    : targetFrameDuration(1.0 / static_cast<double>(frameRate)),
+      frameTime(0.0),
+      sleepAdjust(0.0),
+      evolutionParams(evolutionParams),
+      epochTimeInSeconds(epochTimeInSeconds) {
     initGlfwWindow(name, windowSize);
     loadOpenglFunctions();
     createUI();
@@ -59,6 +63,7 @@ void Window::initGlfwWindow(const std::string& name, const WindowSize& windowSiz
     glfwMakeContextCurrent(window);
     glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
     glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
+    glfwSetCharCallback(window, ImGui_ImplGlfw_CharCallback);
 }
 
 void Window::loadOpenglFunctions() {
@@ -115,19 +120,23 @@ void Window::newFrame() {
 }
 
 void Window::drawOptionsSubwindow() {
-    float subwindowWidth = 150.f;
-    float subwindowHeight = 120.f;
-    float windowMargin = 10.f;
-    static int x = 0;
-    static int y = 0;
-    static float z = 10.f;
+    static constexpr float subwindowWidth = 300.f;
+    static constexpr float subwindowHeight = 150.f;
+    static constexpr float windowMargin = 10.f;
+    auto inputFormat = "%.2f";
     ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_camera.m_width) - subwindowWidth - windowMargin, windowMargin));
     ImGui::SetNextWindowSize(ImVec2(subwindowWidth, subwindowHeight - windowMargin));
     ImGui::Begin("Params", &g_debugDraw.m_showUI, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-    ImGui::SliderInt("Vel Iters", &x, 0, 50);
-    ImGui::SliderInt("Pos Iters", &y, 0, 50);
-    ImGui::SliderFloat("Hertz", &z, 5.0f, 120.0f, "%.0f hz");
+    ImGui::InputDouble("crossover prob", &evolutionParams.crossoverProbability, 0.01, 0.02, inputFormat);
+    ImGui::InputDouble("mutation prob", &evolutionParams.mutationProbability, 0.01, 0.02, inputFormat);
+    ImGui::InputDouble("mutation rate", &evolutionParams.mutationRate, 0.01, 0.02, inputFormat);
+    ImGui::InputInt("epoch time", &epochTimeInSeconds);
     ImGui::End();
+
+    evolutionParams.crossoverProbability = utils::getValueFromRange(0.0, evolutionParams.crossoverProbability, 1.0);
+    evolutionParams.crossoverProbability = utils::getValueFromRange(0.0, evolutionParams.crossoverProbability, 1.0);
+    evolutionParams.mutationRate = utils::getValueFromRange(0.0, evolutionParams.mutationRate, 5.0);
+    epochTimeInSeconds = std::max(0, epochTimeInSeconds);
 }
 
 void Window::setWindowsSize() {
